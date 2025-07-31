@@ -19,24 +19,17 @@
   <link rel="apple-touch-icon" href="https://img.icons8.com/flat/1024/tea.png">
   <link rel="icon" type="image/png" href="https://img.icons8.com/flat/1024/tea.png">
   
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
-  
   <style>
     :root {
-      --primary: #6a1b9a;
-      --primary-dark: #4a148c;
-      --primary-light: #9c27b0;
+      --primary: #4a76a8;
+      --primary-dark: #3a5f8a;
+      --primary-light: #5b8bc3;
       --accent: #ff9800;
-      --accent-dark: #f57c00;
-      --text: #ffffff;
-      --text-secondary: rgba(255, 255, 255, 0.7);
-      --bg: #121212;
-      --card-bg: #1e1e1e;
-      --card-bg-light: #2d2d2d;
-      --success: #4caf50;
-      --error: #f44336;
-      --warning: #ffc107;
+      --text: #e1e9f2;
+      --bg: #1e2a38;
+      --card-bg: #2a3b4d;
+      --message-bg: #3a4f66;
+      --my-message-bg: #4a76a8;
     }
 
     * {
@@ -44,7 +37,7 @@
     }
 
     body {
-      font-family: 'Montserrat', system-ui, sans-serif;
+      font-family: 'Segoe UI', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       margin: 0;
@@ -52,44 +45,28 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
+      line-height: 1.5;
     }
 
     #app {
-      width: 100%;
       max-width: 100%;
       margin: 0;
+      width: 100%;
+      height: 100vh;
       padding: 0;
       flex: 1;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      overflow: hidden;
     }
 
     header {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      padding: 16px 20px;
-      margin-bottom: 0;
+      background: var(--primary);
+      padding: 15px 20px;
       text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
       position: relative;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
       z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .logo-icon {
-      width: 28px;
-      height: 28px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     }
 
     h1 {
@@ -97,84 +74,47 @@
       font-size: 1.5rem;
       color: white;
       font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    .logo-text {
-      font-family: 'Pacifico', cursive;
-      font-size: 1.6rem;
-      background: linear-gradient(to right, #fff, #ffd700);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
     #status {
-      padding: 10px 12px;
-      border-radius: 0;
-      margin-bottom: 0;
+      padding: 8px;
       text-align: center;
-      font-weight: 500;
       font-size: 0.9rem;
-      background: var(--card-bg);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      background: rgba(0,0,0,0.1);
     }
 
-    .online { 
-      background: rgba(46, 125, 50, 0.15); 
-      color: #a5d6a7;
-      border-bottom: 2px solid var(--success);
-    }
-    .offline { 
-      background: rgba(198, 40, 40, 0.15); 
-      color: #ef9a9a;
-      border-bottom: 2px solid var(--error);
-    }
-    .loading { 
-      background: rgba(255, 167, 38, 0.15); 
-      color: #ffe0b2;
-      border-bottom: 2px solid var(--warning);
-    }
-
-    .chat-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background: var(--bg);
-    }
+    .online { color: #a5d6a7; }
+    .offline { color: #ef9a9a; }
+    .loading { color: #ffe0b2; }
 
     #messages {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
+      gap: 10px;
+      background: var(--bg);
     }
 
     .message {
-      background: var(--card-bg);
-      padding: 12px 16px;
-      border-radius: 16px;
+      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 15px;
       animation: fadeIn 0.3s ease;
-      max-width: 85%;
-      position: relative;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      border: 1px solid rgba(255,255,255,0.05);
+      word-wrap: break-word;
     }
 
-    .message.current-user {
-      align-self: flex-end;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      border-top-right-radius: 4px;
-    }
-
-    .message.other-user {
+    .incoming {
+      background: var(--message-bg);
       align-self: flex-start;
-      border-top-left-radius: 4px;
+      border-bottom-left-radius: 5px;
+    }
+
+    .outgoing {
+      background: var(--my-message-bg);
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
     }
 
     @keyframes fadeIn {
@@ -185,166 +125,112 @@
     .message-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       font-size: 0.85rem;
     }
 
     .username {
-      font-weight: 600;
+      font-weight: bold;
       color: var(--accent);
     }
 
-    .message.current-user .username {
-      color: white;
-    }
-
     .timestamp {
-      color: var(--text-secondary);
+      color: rgba(255,255,255,0.6);
       font-size: 0.75rem;
-      margin-left: 8px;
+      margin-left: 10px;
     }
 
     .message-text {
-      font-size: 0.95rem;
-      line-height: 1.4;
-      word-break: break-word;
+      font-size: 1rem;
     }
 
-    .message.current-user .message-text {
-      color: white;
-    }
-
-    .input-container {
+    #inputArea {
+      padding: 10px;
       background: var(--card-bg);
-      padding: 12px 16px;
-      border-top: 1px solid rgba(255,255,255,0.05);
+      border-top: 1px solid rgba(0,0,0,0.1);
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     #messageForm {
       display: flex;
-      gap: 8px;
+      gap: 10px;
+      width: 100%;
     }
 
     #messageInput {
       flex: 1;
-      padding: 12px 16px;
+      padding: 12px 15px;
       border: none;
-      border-radius: 24px;
-      background: var(--card-bg-light);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.1);
       color: white;
-      font-size: 0.95rem;
+      font-size: 1rem;
       outline: none;
-      transition: all 0.2s;
     }
 
     #messageInput:focus {
-      box-shadow: 0 0 0 2px var(--accent);
-    }
-
-    #messageInput::placeholder {
-      color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
     }
 
     #sendButton {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      background: var(--primary);
       color: white;
       border: none;
-      border-radius: 24px;
-      padding: 0 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 48px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
     #sendButton:hover {
-      background: linear-gradient(135deg, var(--primary-light), var(--primary));
-      transform: translateY(-1px);
+      background: var(--primary-light);
     }
 
     #sendButton:disabled {
       background: #555;
       cursor: not-allowed;
-      transform: none;
     }
 
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .clear-btn {
-      background: transparent;
-      color: var(--text-secondary);
-      border: none;
-      padding: 6px 12px;
-      border-radius: 16px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .clear-btn:hover {
-      background: rgba(255,255,255,0.05);
-      color: var(--error);
-    }
-
-    .clear-btn svg {
-      width: 14px;
-      height: 14px;
-      fill: currentColor;
+    .material-icons {
+      font-family: 'Material Icons';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
     }
 
     /* Install Button Styles */
     .install-btn {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      background: var(--primary);
       color: white;
       border: none;
-      border-radius: 24px;
-      padding: 12px 24px;
-      margin: 20px auto;
+      border-radius: 20px;
+      padding: 10px 20px;
+      margin: 10px auto;
       display: block;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: bold;
       text-align: center;
       transition: all 0.3s;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      font-size: 0.9rem;
     }
 
     .install-btn:hover {
-      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      background: var(--primary-light);
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-    }
-
-    /* Empty state */
-    .empty-state {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      color: var(--text-secondary);
-    }
-
-    .empty-state img {
-      width: 100px;
-      height: 100px;
-      opacity: 0.5;
-      margin-bottom: 20px;
     }
 
     /* Scrollbar styling */
@@ -353,110 +239,33 @@
     }
 
     ::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
+      background: rgba(0,0,0,0.1);
     }
 
     ::-webkit-scrollbar-thumb {
       background: var(--primary);
       border-radius: 3px;
     }
-
-    /* Admin badge */
-    .admin-badge {
-      background: var(--error);
-      color: white;
-      font-size: 0.6rem;
-      padding: 2px 6px;
-      border-radius: 10px;
-      margin-left: 6px;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      header {
-        padding: 12px 16px;
-      }
-      
-      h1 {
-        font-size: 1.3rem;
-      }
-      
-      .logo-text {
-        font-size: 1.4rem;
-      }
-      
-      .logo-icon {
-        width: 24px;
-        height: 24px;
-      }
-      
-      #messageForm {
-        gap: 6px;
-      }
-      
-      #messageInput {
-        padding: 10px 14px;
-        font-size: 0.9rem;
-      }
-      
-      #sendButton {
-        padding: 0 16px;
-      }
-      
-      .message {
-        max-width: 90%;
-      }
-    }
-
-    /* iPhone X and similar notch support */
-    @supports (padding: max(0px)) {
-      body {
-        padding-left: env(safe-area-inset-left);
-        padding-right: env(safe-area-inset-right);
-        padding-bottom: env(safe-area-inset-bottom);
-      }
-      
-      .input-container {
-        padding-bottom: calc(12px + env(safe-area-inset-bottom));
-      }
-    }
   </style>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
   <div id="app">
     <header>
-      <div class="logo">
-        <img src="https://img.icons8.com/flat/1024/tea.png" alt="Логотип" class="logo-icon">
-        <h1><span class="logo-text">MiresHabar</span></h1>
-      </div>
+      <h1>MiresHabar</h1>
     </header>
 
     <div id="status" class="loading">Подключение к серверу...</div>
     
-    <div class="chat-container">
-      <div id="messages"></div>
-      
-      <div class="input-container">
-        <div class="controls">
-          <button class="clear-btn" id="clearButton" title="Очистить чат для всех">
-            <svg viewBox="0 0 24 24">
-              <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-            </svg>
-            Очистить
-          </button>
-        </div>
-        <form id="messageForm">
-          <input type="text" id="messageInput" placeholder="Напишите сообщение..." required autocomplete="off">
-          <button type="submit" id="sendButton" disabled>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </form>
-      </div>
+    <div id="messages"></div>
+    
+    <div id="inputArea">
+      <form id="messageForm">
+        <input type="text" id="messageInput" placeholder="Напишите сообщение..." required>
+        <button type="submit" id="sendButton" disabled>
+          <span class="material-icons">send</span>
+        </button>
+      </form>
     </div>
 
     <button class="install-btn" id="installButton" style="display: none;">Установить приложение</button>
@@ -494,10 +303,8 @@
       const sendButton = document.getElementById('sendButton');
       const statusDiv = document.getElementById('status');
       const installButton = document.getElementById('installButton');
-      const clearButton = document.getElementById('clearButton');
 
       let currentUserId = null;
-      let isAdmin = false;
 
       function updateStatus(text, status) {
         statusDiv.textContent = text;
@@ -514,26 +321,10 @@
       auth.signInAnonymously()
         .then((userCredential) => {
           currentUserId = userCredential.user.uid;
-          console.log("Signed in anonymously with ID:", currentUserId);
+          console.log("Signed in anonymously");
           updateStatus("✓ Подключено к серверу", "online");
           sendButton.disabled = false;
           messageInput.focus();
-          
-          // Check if admin (for demo purposes, first user is admin)
-          if (!localStorage.getItem('adminChecked')) {
-            database.ref('admin').once('value').then((snapshot) => {
-              if (!snapshot.exists()) {
-                // First user becomes admin
-                database.ref('admin').set(currentUserId);
-                isAdmin = true;
-                console.log("This user is now admin");
-              } else if (snapshot.val() === currentUserId) {
-                isAdmin = true;
-                console.log("This user is admin");
-              }
-              localStorage.setItem('adminChecked', 'true');
-            });
-          }
           
           // Listen for new messages
           database.ref('messages')
@@ -551,16 +342,12 @@
 
       // Display a message
       function displayMessage(message) {
-        const isCurrentUser = message.userId === currentUserId;
+        const isMyMessage = message.userId === currentUserId;
         const messageElement = document.createElement('div');
-        messageElement.className = `message ${isCurrentUser ? 'current-user' : 'other-user'}`;
-        
-        const isAdminMessage = message.userId === isAdmin;
-        const adminBadge = isAdminMessage ? '<span class="admin-badge">ADMIN</span>' : '';
-        
+        messageElement.className = `message ${isMyMessage ? 'outgoing' : 'incoming'}`;
         messageElement.innerHTML = `
           <div class="message-header">
-            <span class="username">${message.username || 'Гость'}${adminBadge}</span>
+            <span class="username">${message.username || 'Гость'}</span>
             <span class="timestamp">${formatTime(message.timestamp)}</span>
           </div>
           <div class="message-text">${message.text}</div>
@@ -598,24 +385,6 @@
           updateStatus("✗ Ошибка отправки", "offline");
         } finally {
           sendButton.disabled = false;
-        }
-      });
-
-      // Clear chat handler
-      clearButton.addEventListener('click', async () => {
-        if (!isAdmin) {
-          alert('Только администратор может очищать чат');
-          return;
-        }
-        
-        if (confirm('Вы уверены, что хотите очистить чат для всех пользователей?')) {
-          try {
-            await database.ref('messages').remove();
-            messagesDiv.innerHTML = '';
-          } catch (error) {
-            console.error("Clear chat error:", error);
-            alert('Ошибка при очистке чата');
-          }
         }
       });
 
@@ -672,7 +441,7 @@
 
       // ===== Service Worker Registration =====
       const swContent = `
-        const CACHE_NAME = 'mireshabar-v2';
+        const CACHE_NAME = 'mireshabar-v1';
         const ASSETS = [
           '/',
           '/index.html',
@@ -680,28 +449,13 @@
           'https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js',
           'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js',
           'https://img.icons8.com/flat/1024/tea.png',
-          'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Pacifico&display=swap'
+          'https://fonts.googleapis.com/icon?family=Material+Icons'
         ];
 
         self.addEventListener('install', (e) => {
           e.waitUntil(
             caches.open(CACHE_NAME)
               .then(cache => cache.addAll(ASSETS))
-              .then(() => self.skipWaiting())
-          );
-        });
-
-        self.addEventListener('activate', (e) => {
-          e.waitUntil(
-            caches.keys().then(cacheNames => {
-              return Promise.all(
-                cacheNames.map(cache => {
-                  if (cache !== CACHE_NAME) {
-                    return caches.delete(cache);
-                  }
-                })
-              );
-            })
           );
         });
 
@@ -727,19 +481,6 @@
             });
         });
       }
-
-      // Handle viewport on mobile devices
-      function adjustViewport() {
-        const viewport = document.querySelector('meta[name="viewport"]');
-        if (window.innerWidth <= 600) {
-          viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
-        } else {
-          viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, viewport-fit=cover');
-        }
-      }
-
-      window.addEventListener('resize', adjustViewport);
-      adjustViewport();
 
     } catch (error) {
       console.error("Initialization error:", error);
