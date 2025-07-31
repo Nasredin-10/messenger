@@ -324,7 +324,7 @@
             text: messageText,
             timestamp: firebase.database.ServerValue.TIMESTAMP,
             userId: auth.currentUser.uid,
-            username: Гость_${auth.currentUser.uid.slice(0, 4)}
+            username: `Гость_${auth.currentUser.uid.slice(0, 4)}`
           });
           
           messageInput.value = '';
