@@ -1,85 +1,92 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
-  <title>MiresHabar - Мессенджер</title>
-  <meta name="theme-color" content="#1a0e14"/>
-  <link rel="apple-touch-icon" href="https://img.icons8.com/flat/1024/tea.png"/>
-  <link rel="icon" href="https://img.icons8.com/flat/1024/tea.png" type="image/png"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MiresHabar</title>
+  <meta name="theme-color" content="#1a0e14" />
+  <link rel="icon" href="https://img.icons8.com/flat/1024/tea.png" />
   <style>
     :root {
+      --primary: #a14a6e;
+      --primary-dark: #1a0e14;
+      --primary-light: #d58fa8;
+      --accent: #f4c0cd;
+      --text: #ffffff;
       --bg: #1a0e14;
       --card-bg: #24141b;
-      --accent: #e38ba5;
-      --text: #ffffff;
-      --muted: #b97f8a;
-      --shadow: rgba(0, 0, 0, 0.4);
     }
 
     body {
-      margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
 
     #app {
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 20px;
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
     }
 
     header {
-      text-align: center;
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 16px;
       margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
     }
 
-    header h1 {
-      font-size: 24px;
-      font-weight: bold;
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
       color: var(--accent);
     }
 
     #status {
       padding: 12px;
-      border-radius: 10px;
-      text-align: center;
+      border-radius: 12px;
       margin-bottom: 15px;
+      text-align: center;
       font-weight: bold;
       background: var(--card-bg);
-      box-shadow: 0 2px 8px var(--shadow);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
     }
 
-    .online { color: #9ee0aa; }
-    .offline { color: #f5a4a4; }
-    .loading { color: #ffc285; }
+    .online { color: #90ee90; }
+    .offline { color: #ff9999; }
+    .loading { color: #ffc107; }
 
     #messages {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
       background: var(--card-bg);
       border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 15px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 4px 12px var(--shadow);
+      gap: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     .message {
       background: rgba(255, 255, 255, 0.05);
-      padding: 14px;
+      padding: 12px 16px;
       border-radius: 12px;
       border-left: 4px solid var(--accent);
       animation: fadeIn 0.3s ease;
+      color: var(--text);
     }
 
     @keyframes fadeIn {
@@ -90,37 +97,32 @@
     .message-header {
       display: flex;
       justify-content: space-between;
-      font-size: 0.9rem;
       margin-bottom: 6px;
-      color: var(--muted);
+      font-size: 0.9rem;
+      color: var(--accent);
     }
 
     .username {
       font-weight: bold;
-      color: var(--accent);
     }
 
     .timestamp {
-      color: #aaa;
-    }
-
-    .message-text {
-      font-size: 1rem;
-      color: var(--text);
+      color: rgba(255,255,255,0.5);
+      font-size: 0.8rem;
     }
 
     #messageForm {
       display: flex;
-      gap: 12px;
-      margin-top: 20px;
+      gap: 10px;
+      margin-top: auto;
     }
 
     #messageInput {
       flex: 1;
       padding: 14px;
+      border: none;
       border-radius: 12px;
       background: var(--card-bg);
-      border: 1px solid var(--accent);
       color: white;
       font-size: 1rem;
     }
@@ -130,18 +132,18 @@
     }
 
     #sendButton {
-      background: var(--accent);
-      border: none;
+      background: var(--primary);
       color: white;
+      border: none;
       border-radius: 12px;
       padding: 0 24px;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.2s;
     }
 
     #sendButton:hover {
-      background: #f4a3ba;
+      background: var(--primary-light);
     }
 
     #sendButton:disabled {
@@ -149,30 +151,43 @@
       cursor: not-allowed;
     }
 
+    @media (max-width: 600px) {
+      #app {
+        padding: 12px;
+      }
+
+      header {
+        padding: 16px;
+      }
+
+      #messageForm {
+        flex-direction: column;
+      }
+
+      #sendButton {
+        padding: 12px;
+        width: 100%;
+      }
+    }
+
     .install-btn {
-      margin: 24px auto 0;
-      background: var(--accent);
+      background: var(--primary);
       color: white;
       border: none;
       border-radius: 12px;
       padding: 12px 24px;
-      font-weight: bold;
+      margin: 20px auto;
+      display: block;
       cursor: pointer;
-      transition: 0.3s;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s;
     }
 
     .install-btn:hover {
-      background: #f4a3ba;
-    }
-
-    @media (max-width: 600px) {
-      #messageForm {
-        flex-direction: column;
-      }
-      #sendButton {
-        width: 100%;
-        padding: 14px;
-      }
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
   </style>
 </head>
@@ -187,20 +202,27 @@
     <div id="messages"></div>
 
     <form id="messageForm">
-      <input type="text" id="messageInput" placeholder="Напишите сообщение..." required/>
+      <input type="text" id="messageInput" placeholder="Напишите сообщение..." required />
       <button type="submit" id="sendButton" disabled>Отправить</button>
     </form>
 
     <button class="install-btn" id="installButton" style="display: none;">Установить приложение</button>
   </div>
 
-  <!-- Firebase вам не трогал — всё как было -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script>
-    // ===== Firebase logic unchanged! =====
-    const firebaseConfig = {/* твоя конфигурация */};
+    const firebaseConfig = {
+      apiKey: "ТВОЙ_API_KEY",
+      authDomain: "ТВОЙ_AUTH_DOMAIN",
+      databaseURL: "ТВОЙ_DATABASE_URL",
+      projectId: "ТВОЙ_PROJECT_ID",
+      storageBucket: "ТВОЙ_BUCKET",
+      messagingSenderId: "ТВОЙ_SENDER_ID",
+      appId: "ТВОЙ_APP_ID"
+    };
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
@@ -215,14 +237,17 @@
       statusDiv.textContent = text;
       statusDiv.className = cls;
     }
+
     function formatTime(timestamp) {
       const d = new Date(timestamp);
-      return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
     auth.signInAnonymously()
-      .then(() => { updateStatus("✓ Подключено к серверу", "online"); sendButton.disabled = false; })
       .then(() => {
+        updateStatus("✓ Подключено к серверу", "online");
+        sendButton.disabled = false;
+
         database.ref('messages').orderByChild('timestamp').limitToLast(50)
           .on('child_added', snap => {
             const m = snap.val();
@@ -230,7 +255,7 @@
             el.className = 'message';
             el.innerHTML = `
               <div class="message-header">
-                <span class="username">${m.username||'Гость'}</span>
+                <span class="username">${m.username || 'Гость'}</span>
                 <span class="timestamp">${formatTime(m.timestamp)}</span>
               </div>
               <div class="message-text">${m.text}</div>`;
@@ -238,7 +263,10 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
           });
       })
-      .catch(err => { console.error(err); updateStatus("✗ Ошибка подключения", "offline"); });
+      .catch(err => {
+        console.error(err);
+        updateStatus("✗ Ошибка подключения", "offline");
+      });
 
     messageForm.addEventListener('submit', async e => {
       e.preventDefault();
@@ -246,17 +274,20 @@
       if (!text) return;
       sendButton.disabled = true;
       await database.ref('messages').push({
-        text, timestamp: firebase.database.ServerValue.TIMESTAMP,
+        text,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
         userId: auth.currentUser.uid,
-        username: Гость_${auth.currentUser.uid.slice(0,4)}
+        username: Гость_${auth.currentUser.uid.slice(0, 4)}
       });
       messageInput.value = '';
       sendButton.disabled = false;
     });
 
     database.ref('.info/connected').on('value', snap => {
-      updateStatus(snap.val() ? "✓ Подключено к серверу" : "⌛ Нет соединения",
-                   snap.val() ? "online" : "offline");
+      updateStatus(
+        snap.val() ? "✓ Подключено к серверу" : "⌛ Нет соединения",
+        snap.val() ? "online" : "offline"
+      );
     });
   </script>
 </body>
