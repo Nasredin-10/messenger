@@ -9,30 +9,43 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MiresHabar">
-  <meta name="theme-color" content="#6a1b9a">
+  <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Мессенджер MiresHabar">
   
   <!-- Base64 Manifest -->
-  <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM2YTFiOWEiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1nLmljb25zOC5jb20vZmxhdC8xMDI0L3RlYS5wbmciLAogICAgICAic2l6ZXMiOiAiMTgweDE4MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbGF0LzEwMjQvdGVhLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ">
+  <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiI2ZmZmZmZiIsCiAgInRoZW1lX2NvbG9yIjogIiNmZmZmZmYiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1nLmljb25zOC5jb20vZmxhdC8xMDI0L3RlYS5wbmciLAogICAgICAic2l6ZXMiOiAiMTgweDE4MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbGF0LzEwMjQvdGVhLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ">
   
   <!-- External Icons -->
   <link rel="apple-touch-icon" href="https://img.icons8.com/flat/1024/tea.png">
   <link rel="icon" type="image/png" href="https://img.icons8.com/flat/1024/tea.png">
   
   <style>
-    /* Весь ваш CSS остался без изменений */
     :root {
-      --primary: #6a1b9a;
-      --primary-dark: #4a148c;
-      --primary-light: #9c27b0;
-      --accent: #ff9800;
-      --text: #ffffff;
-      --bg: #121212;
-      --card-bg: #1e1e1e;
+      --primary: #6200ee;
+      --primary-dark: #3700b3;
+      --primary-light: #bb86fc;
+      --text: #121212;
+      --text-light: #757575;
+      --bg: #ffffff;
+      --card-bg: #f5f5f5;
+      --border: #e0e0e0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary: #bb86fc;
+        --primary-dark: #3700b3;
+        --primary-light: #bb86fc;
+        --text: #ffffff;
+        --text-light: #b0b0b0;
+        --bg: #121212;
+        --card-bg: #1e1e1e;
+        --border: #333333;
+      }
     }
 
     body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       margin: 0;
@@ -40,63 +53,63 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      line-height: 1.5;
     }
 
     #app {
-      max-width: 800px;
+      max-width: 600px;
       margin: 0 auto;
       width: 100%;
-      padding: 20px;
+      padding: 16px;
       flex: 1;
       display: flex;
       flex-direction: column;
+      box-sizing: border-box;
     }
 
     header {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
+      padding: 16px 0;
+      margin-bottom: 16px;
       text-align: center;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border-bottom: 1px solid var(--border);
     }
 
     h1 {
       margin: 0;
-      font-size: 1.8rem;
-      color: white;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--primary);
     }
 
     #status {
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 15px;
+      padding: 8px;
+      margin-bottom: 16px;
       text-align: center;
-      font-weight: bold;
+      font-size: 0.875rem;
+      color: var(--text-light);
+      border-radius: 4px;
     }
 
-    .online { background: rgba(46, 125, 50, 0.2); color: #a5d6a7; }
-    .offline { background: rgba(198, 40, 40, 0.2); color: #ef9a9a; }
-    .loading { background: rgba(255, 167, 38, 0.2); color: #ffe0b2; }
+    .online { color: #388e3c; }
+    .offline { color: #d32f2f; }
+    .loading { color: var(--text-light); }
 
     #messages {
       flex: 1;
       overflow-y: auto;
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
+      padding: 8px 0;
+      margin-bottom: 16px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
     .message {
-      background: rgba(106, 27, 154, 0.3);
+      background: var(--card-bg);
       padding: 12px 16px;
       border-radius: 8px;
-      border-left: 4px solid var(--accent);
       animation: fadeIn 0.3s ease;
+      border: 1px solid var(--border);
     }
 
     @keyframes fadeIn {
@@ -107,77 +120,67 @@
     .message-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
+      margin-bottom: 4px;
+      font-size: 0.875rem;
     }
 
     .username {
-      font-weight: bold;
-      color: var(--accent);
+      font-weight: 500;
+      color: var(--primary);
     }
 
     .timestamp {
-      color: rgba(255,255,255,0.6);
-      font-size: 0.8rem;
+      color: var(--text-light);
+      font-size: 0.75rem;
+    }
+
+    .message-text {
+      font-size: 0.9375rem;
     }
 
     #messageForm {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
     }
 
     #messageInput {
       flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
       background: var(--card-bg);
-      color: white;
-      font-size: 1rem;
+      color: var(--text);
+      font-size: 0.9375rem;
+      outline: none;
+      transition: border 0.2s;
     }
 
     #messageInput:focus {
-      outline: 2px solid var(--accent);
+      border-color: var(--primary);
     }
 
     #sendButton {
       background: var(--primary);
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 0 24px;
-      font-weight: bold;
+      border-radius: 24px;
+      padding: 0 20px;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
+      min-width: 80px;
     }
 
     #sendButton:hover {
-      background: var(--primary-light);
+      background: var(--primary-dark);
     }
 
     #sendButton:disabled {
-      background: #555;
+      background: var(--text-light);
       cursor: not-allowed;
-    }
-
-    @media (max-width: 600px) {
-      #app {
-        padding: 12px;
-      }
-      
-      header {
-        padding: 16px;
-      }
-      
-      #messageForm {
-        flex-direction: column;
-      }
-      
-      #sendButton {
-        padding: 12px;
-        width: 100%;
-      }
     }
 
     /* Install Button Styles */
@@ -185,25 +188,52 @@
       background: var(--primary);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 24px;
       padding: 12px 24px;
-      margin: 20px auto;
+      margin: 16px auto;
       display: block;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 500;
       text-align: center;
-      transition: all 0.3s;
+      transition: all 0.2s;
+      font-size: 0.875rem;
     }
 
     .install-btn:hover {
-      background: var(--primary-light);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      background: var(--primary-dark);
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--text-light);
+      border-radius: 3px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      #app {
+        padding: 12px;
+      }
+      
+      .message {
+        padding: 10px 14px;
+      }
+      
+      #messageInput {
+        padding: 10px 14px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Весь ваш HTML остался без изменений -->
   <div id="app">
     <header>
       <h1>MiresHabar</h1>
@@ -227,8 +257,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
   <script>
-    // Весь ваш JavaScript остался без изменений, кроме обновления ссылки на иконку в Service Worker
-    
     // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAmRBqxgDcPQDIObFLR5wGM2DbYkaFjkkg",
