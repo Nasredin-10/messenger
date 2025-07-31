@@ -64,10 +64,10 @@
       overflow-x: hidden;
     }
 
-    /* Dynamic Island Simulation */
-    .dynamic-island {
+    /* Dynamic Island Detection */
+    .has-dynamic-island {
       position: fixed;
-      top: 10px;
+      top: 0;
       left: 50%;
       transform: translateX(-50%);
       width: 120px;
@@ -82,7 +82,7 @@
       overflow: hidden;
     }
 
-    .dynamic-island::before {
+    .has-dynamic-island::before {
       content: '';
       position: absolute;
       top: -10px;
@@ -101,6 +101,19 @@
       animation: gradientFlow 8s ease infinite;
     }
 
+    .has-dynamic-island::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150%;
+      height: 150%;
+      background: radial-gradient(circle, rgba(255,159,10,0.2) 0%, rgba(255,159,10,0) 70%);
+      border-radius: 50%;
+      animation: pulse 4s infinite;
+    }
+
     .dynamic-island-content {
       color: white;
       font-size: 0.8rem;
@@ -117,6 +130,12 @@
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
+    }
+
+    @keyframes pulse {
+      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.2; }
+      100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
     }
 
     /* PWA Safe Area */
@@ -574,28 +593,15 @@
         font-size: 0.95rem;
       }
       
-      .dynamic-island {
+      .has-dynamic-island {
         width: 100px;
         height: 30px;
-      }
-    }
-
-    /* iPhone Notch Safe Area */
-    @supports (padding: max(0px)) {
-      body {
-        padding-top: max(20px, env(safe-area-inset-top));
-        padding-left: max(12px, env(safe-area-inset-left));
-        padding-right: max(12px, env(safe-area-inset-right));
-        padding-bottom: max(12px, env(safe-area-inset-bottom));
       }
     }
   </style>
 </head>
 <body>
-  <!-- Dynamic Island for iPhone -->
-  <div class="dynamic-island water-drop" id="dynamicIsland">
-    <div class="dynamic-island-content">MiresHabar</div>
-  </div>
+  <!-- Dynamic Island will be added here by JavaScript if detected -->
   
   <!-- Floating Bubbles Background -->
   <div class="bubbles" id="bubbles"></div>
@@ -654,13 +660,45 @@
     // Initialize bubbles
     createBubbles();
     
-    // Dynamic Island Animation
+    // Detect iPhone with Dynamic Island
+    function detectDynamicIsland() {
+      // Check if iPhone with notch (iPhone X and later)
+      const isIPhone = /iPhone/.test(navigator.userAgent);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      
+      // iPhone 14 Pro and later have Dynamic Island
+      const isDynamicIsland = isIPhone && 
+                             (window.screen.height >= 852 || window.screen.width >= 393); // iPhone 14 Pro screen dimensions
+      
+      if (isDynamicIsland) {
+        const dynamicIsland = document.createElement('div');
+        dynamicIsland.className = 'has-dynamic-island water-drop';
+        dynamicIsland.id = 'dynamicIsland';
+        dynamicIsland.innerHTML = '<div class="dynamic-island-content">MiresHabar</div>';
+        document.body.prepend(dynamicIsland);
+        
+        return true;
+      }
+      
+      return false;
+    }
+    
+    // Animate Dynamic Island
     function animateDynamicIsland() {
       const island = document.getElementById('dynamicIsland');
-      let isExpanded = false;
+      if (!island) return;
       
-      // Random animations
-      const animations = [
+      // Pulse animation
+      setInterval(() => {
+        island.style.transform = 'translateX(-50%) scale(1.05)';
+        setTimeout(() => {
+          island.style.transform = 'translateX(-50%) scale(1)';
+        }, 300);
+      }, 10000);
+      
+      // Message received animation
+      const messageAnimations = [
         () => {
           island.style.width = '150px';
           island.querySelector('.dynamic-island-content').textContent = 'Новое сообщение';
@@ -674,22 +712,16 @@
           setTimeout(() => {
             island.style.height = '35px';
           }, 1500);
-        },
-        () => {
-          island.style.transform = 'translateX(-50%) scale(1.1)';
-          setTimeout(() => {
-            island.style.transform = 'translateX(-50%) scale(1)';
-          }, 1000);
         }
       ];
       
       // Randomly trigger animations
       setInterval(() => {
         if (Math.random() > 0.7) {
-          const randomAnim = animations[Math.floor(Math.random() * animations.length)];
+          const randomAnim = messageAnimations[Math.floor(Math.random() * messageAnimations.length)];
           randomAnim();
         }
-      }, 5000);
+      }, 8000);
     }
     
     // Firebase configuration with working server
@@ -723,16 +755,20 @@
         statusDiv.textContent = text;
         statusDiv.className = status;
         
-        // Update Dynamic Island
+        // Update Dynamic Island if exists
         const islandContent = document.querySelector('.dynamic-island-content');
-        islandContent.textContent = text;
-        
-        // Pulse animation
-        const island = document.getElementById('dynamicIsland');
-        island.style.transform = 'translateX(-50%) scale(1.05)';
-        setTimeout(() => {
-          island.style.transform = 'translateX(-50%) scale(1)';
-        }, 300);
+        if (islandContent) {
+          islandContent.textContent = text;
+          
+          // Pulse animation
+          const island = document.getElementById('dynamicIsland');
+          if (island) {
+            island.style.transform = 'translateX(-50%) scale(1.05)';
+            setTimeout(() => {
+              island.style.transform = 'translateX(-50%) scale(1)';
+            }, 300);
+          }
+        }
       }
 
       function formatTime(timestamp) {
@@ -757,15 +793,17 @@
               const message = snapshot.val();
               displayMessage(message);
               
-              // Animate Dynamic Island on new message
+              // Animate Dynamic Island on new message (if not from current user)
               if (message.userId !== auth.currentUser?.uid) {
                 const island = document.getElementById('dynamicIsland');
-                island.style.width = '150px';
-                island.querySelector('.dynamic-island-content').textContent = 'Новое сообщение';
-                setTimeout(() => {
-                  island.style.width = '120px';
-                  island.querySelector('.dynamic-island-content').textContent = 'MiresHabar';
-                }, 2000);
+                if (island) {
+                  island.style.width = '150px';
+                  island.querySelector('.dynamic-island-content').textContent = 'Новое сообщение';
+                  setTimeout(() => {
+                    island.style.width = '120px';
+                    island.querySelector('.dynamic-island-content').textContent = 'MiresHabar';
+                  }, 2000);
+                }
               }
             });
         })
@@ -832,8 +870,10 @@
         }
       });
 
-      // Start Dynamic Island animations
-      animateDynamicIsland();
+      // Detect and animate Dynamic Island
+      if (detectDynamicIsland()) {
+        animateDynamicIsland();
+      }
 
       // ===== PWA Installation =====
       function isIOS() {
