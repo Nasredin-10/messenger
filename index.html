@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a1e15">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Намаз">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Точные времена намаза">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Иконки с внешнего источника -->
+    <link rel="apple-touch-icon" href="https://img.icons8.com/ios/180/islamic/prayer.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios/192/islamic/prayer.png">
+    
+    <title>Точные времена намаза</title>
+    <style>
+        /* Ваши стили остаются без изменений */
+        body {
+            font-family: 'Scheherazade New', serif;
+            background: #051a12;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        /* ... остальные стили ... */
+    </style>
+</head>
+<body>
+    <!-- Ваш HTML-код -->
+    <div id="app">Приложение для намаза</div>
+
+    <script>
+        // Регистрация Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker зарегистрирован');
+                    })
+                    .catch(error => {
+                        console.log('Ошибка регистрации:', error);
+                    });
+            });
+        }
+        
+        // Проверка PWA (для iOS)
+        function isRunningStandalone() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone;
+        }
+        
+        if (isRunningStandalone()) {
+            console.log("Приложение запущено в standalone режиме");
+        }
+    </script>
+</body>
+</html>
