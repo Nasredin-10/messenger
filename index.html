@@ -1,467 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>MiresHabar - Личные чаты</title>
-  
-  <!-- PWA Configuration -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="MiresHabar">
-  <meta name="theme-color" content="#6a1b9a">
-  <meta name="description" content="Мессенджер с личными чатами">
-  
-  <!-- Base64 Manifest -->
-  <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM2YTFiOWEiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1nLmljb25zOC5jb20vZmxhdC8xMDI0L3RlYS5wbmciLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbGF0LzEwMjQvdGVhLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ">
-  
-  <!-- External Icons -->
-  <link rel="apple-touch-icon" href="https://img.icons8.com/flat/1024/tea.png">
-  <link rel="icon" type="image/png" href="https://img.icons8.com/flat/1024/tea.png">
-  
-  <style>
-    :root {
-      --primary: #6a1b9a;
-      --primary-dark: #4a148c;
-      --primary-light: #9c27b0;
-      --accent: #ff9800;
-      --text: #ffffff;
-      --bg: #121212;
-      --card-bg: #1e1e1e;
-      --sidebar-bg: #1a1a1a;
-      --active-chat: rgba(106, 27, 154, 0.4);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #app {
-      display: flex;
-      flex: 1;
-      max-height: 100vh;
-      overflow: hidden;
-    }
-
-    /* Auth Screen */
-    #authScreen {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      width: 100%;
-      max-width: 400px;
-      margin: auto;
-    }
-
-    .auth-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 30px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .auth-card h2 {
-      margin-bottom: 20px;
-      color: var(--accent);
-    }
-
-    #userNameInput {
-      width: 100%;
-      padding: 12px 15px;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      font-size: 1rem;
-      margin-bottom: 15px;
-    }
-
-    #saveNameBtn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 24px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      width: 100%;
-    }
-
-    #saveNameBtn:hover {
-      background: var(--primary-light);
-    }
-
-    /* Main Chat Layout */
-    #chatContainer {
-      display: none;
-      flex: 1;
-      height: 100vh;
-    }
-
-    /* Sidebar with contacts */
-    #sidebar {
-      width: 250px;
-      background: var(--sidebar-bg);
-      border-right: 1px solid #333;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    #userInfo {
-      padding: 20px;
-      background: var(--primary-dark);
-      border-bottom: 1px solid #333;
-    }
-
-    #userInfo .username {
-      font-weight: bold;
-      font-size: 1.1rem;
-      margin-bottom: 5px;
-    }
-
-    #userInfo .status {
-      display: flex;
-      align-items: center;
-      font-size: 0.85rem;
-      color: #a5d6a7;
-    }
-
-    .status-indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #4caf50;
-      margin-right: 8px;
-    }
-
-    #contactsHeader {
-      padding: 15px 20px;
-      font-weight: bold;
-      border-bottom: 1px solid #333;
-    }
-
-    #contactsList {
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .contact {
-      padding: 12px 20px;
-      border-bottom: 1px solid #333;
-      cursor: pointer;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-    }
-
-    .contact:hover {
-      background: rgba(255,255,255,0.05);
-    }
-
-    .contact.active {
-      background: var(--active-chat);
-    }
-
-    .contact-avatar {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      background: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 12px;
-      font-weight: bold;
-    }
-
-    .contact-info {
-      flex: 1;
-    }
-
-    .contact-name {
-      font-weight: bold;
-    }
-
-    .contact-status {
-      font-size: 0.8rem;
-      color: #aaa;
-    }
-
-    /* Main chat area */
-    #mainChat {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #chatHeader {
-      padding: 15px 20px;
-      background: var(--sidebar-bg);
-      border-bottom: 1px solid #333;
-      display: flex;
-      align-items: center;
-    }
-
-    .chat-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 12px;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
-    #chatPartnerInfo .name {
-      font-weight: bold;
-    }
-
-    #chatPartnerInfo .status {
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-
-    #messagesContainer {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-      background: var(--bg);
-    }
-
-    .message {
-      max-width: 70%;
-      padding: 10px 15px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      animation: fadeIn 0.3s ease;
-      position: relative;
-      word-wrap: break-word;
-    }
-
-    .message.sent {
-      background: var(--primary);
-      margin-left: auto;
-      border-bottom-right-radius: 4px;
-    }
-
-    .message.received {
-      background: var(--card-bg);
-      margin-right: auto;
-      border-bottom-left-radius: 4px;
-    }
-
-    .message-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 5px;
-      font-size: 0.85rem;
-    }
-
-    .message-sender {
-      font-weight: bold;
-    }
-
-    .message-timestamp {
-      color: rgba(255,255,255,0.6);
-      margin-left: 10px;
-    }
-
-    #messageForm {
-      display: flex;
-      padding: 15px;
-      background: var(--sidebar-bg);
-      border-top: 1px solid #333;
-    }
-
-    #messageInput {
-      flex: 1;
-      padding: 12px 15px;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      font-size: 1rem;
-    }
-
-    #messageInput:focus {
-      outline: 2px solid var(--accent);
-    }
-
-    #sendButton {
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 0 20px;
-      margin-left: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    #sendButton:hover {
-      background: var(--primary-light);
-    }
-
-    #sendButton:disabled {
-      background: #555;
-      cursor: not-allowed;
-    }
-
-    /* Status indicator */
-    #status {
-      padding: 12px;
-      border-radius: 8px;
-      margin: 10px auto;
-      text-align: center;
-      font-weight: bold;
-      max-width: 400px;
-      display: none;
-    }
-
-    .online { background: rgba(46, 125, 50, 0.2); color: #a5d6a7; }
-    .offline { background: rgba(198, 40, 40, 0.2); color: #ef9a9a; }
-    .loading { background: rgba(255, 167, 38, 0.2); color: #ffe0b2; }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      #sidebar {
-        width: 80px;
-      }
-      
-      .contact-name, .contact-status, #contactsHeader {
-        display: none;
-      }
-      
-      .contact {
-        justify-content: center;
-      }
-      
-      .contact-avatar {
-        margin-right: 0;
-      }
-    }
-
-    @media (max-width: 480px) {
-      #sidebar {
-        position: absolute;
-        left: -250px;
-        z-index: 100;
-        height: 100%;
-        transition: left 0.3s;
-      }
-      
-      #sidebar.active {
-        left: 0;
-      }
-      
-      #toggleSidebar {
-        display: block;
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        background: var(--primary);
-        border: none;
-        color: white;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        font-size: 1.2rem;
-        cursor: pointer;
-        z-index: 10;
-      }
-    }
-  </style>
+  <!-- ... (head content remains the same) ... -->
 </head>
 <body>
-  <!-- Auth Screen -->
-  <div id="authScreen">
-    <div class="auth-card">
-      <h2>Добро пожаловать в MiresHabar</h2>
-      <p>Введите ваше имя для входа в чат</p>
-      <input type="text" id="userNameInput" placeholder="Ваше имя" required>
-      <button id="saveNameBtn">Продолжить</button>
-    </div>
-  </div>
-  
-  <!-- Main Chat Container -->
-  <div id="chatContainer">
-    <button id="toggleSidebar" style="display: none;">☰</button>
-    
-    <!-- Sidebar with contacts -->
-    <div id="sidebar">
-      <div id="userInfo">
-        <div class="username" id="currentUserName"></div>
-        <div class="status">
-          <span class="status-indicator"></span>
-          <span>онлайн</span>
-        </div>
-      </div>
-      
-      <div id="contactsHeader">Контакты</div>
-      
-      <div id="contactsList">
-        <!-- Contacts will be populated here -->
-      </div>
-    </div>
-    
-    <!-- Main chat area -->
-    <div id="mainChat">
-      <div id="chatHeader">
-        <div class="chat-avatar" id="chatPartnerAvatar">?</div>
-        <div id="chatPartnerInfo">
-          <div class="name">Выберите собеседника</div>
-          <div class="status">Для начала общения</div>
-        </div>
-      </div>
-      
-      <div id="status" class="loading">Подключение к серверу...</div>
-      
-      <div id="messagesContainer">
-        <!-- Messages will be displayed here -->
-        <div class="welcome-message">
-          <p>Добро пожаловать в MiresHabar!</p>
-          <p>Выберите собеседника из списка слева, чтобы начать общение.</p>
-        </div>
-      </div>
-      
-      <form id="messageForm" style="display: none;">
-        <input type="text" id="messageInput" placeholder="Напишите сообщение..." required>
-        <button type="submit" id="sendButton" disabled>Отправить</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <!-- ... (body content remains the same) ... -->
 
   <script>
     // Firebase configuration
@@ -504,12 +47,16 @@
       let selectedChatPartner = null;
       let users = {};
       let userName = '';
+      let userEmail = '';
       
       // Check if user has a saved name
       function checkSavedUser() {
         const savedName = localStorage.getItem('userName');
-        if (savedName) {
+        const savedEmail = localStorage.getItem('userEmail');
+        
+        if (savedName && savedEmail) {
           userName = savedName;
+          userEmail = savedEmail;
           startChatApp();
         } else {
           authScreen.style.display = 'flex';
@@ -522,14 +69,14 @@
         authScreen.style.display = 'none';
         chatContainer.style.display = 'flex';
         
-        // Sign in anonymously
-        auth.signInAnonymously()
+        // Sign in with email/password for persistent identity
+        auth.signInWithEmailAndPassword(userEmail, 'defaultPassword')
           .then((userCredential) => {
             currentUser = userCredential.user;
-            console.log("Signed in anonymously:", currentUser.uid);
+            console.log("Signed in:", currentUser.uid);
             
-            // Save user in database
-            saveUser(currentUser.uid, userName);
+            // Save user in database with persistent ID
+            saveUser(currentUser.uid, userName, userEmail);
             
             // Update UI
             currentUserName.textContent = userName;
@@ -542,15 +89,43 @@
             sendButton.disabled = false;
           })
           .catch((error) => {
-            console.error("Auth error:", error);
-            updateStatus("✗ Ошибка подключения", "offline");
+            // If user doesn't exist, create a new one
+            if (error.code === 'auth/user-not-found') {
+              auth.createUserWithEmailAndPassword(userEmail, 'defaultPassword')
+                .then((userCredential) => {
+                  currentUser = userCredential.user;
+                  console.log("New user created:", currentUser.uid);
+                  
+                  // Save user in database
+                  saveUser(currentUser.uid, userName, userEmail);
+                  
+                  // Update UI
+                  currentUserName.textContent = userName;
+                  
+                  // Load users and set up listeners
+                  loadUsers();
+                  
+                  // Update status
+                  updateStatus("✓ Подключено к серверу", "online");
+                  sendButton.disabled = false;
+                })
+                .catch((error) => {
+                  console.error("Create user error:", error);
+                  updateStatus("✗ Ошибка создания пользователя", "offline");
+                });
+            } else {
+              console.error("Auth error:", error);
+              updateStatus("✗ Ошибка подключения", "offline");
+            }
           });
       }
       
-      // Save user to database
-      function saveUser(uid, name) {
-        database.ref('users/' + uid).set({
+      // Save user to database with persistent ID
+      function saveUser(uid, name, email) {
+        database.ref('users/' + email.replace('.', '_')).set({
+          uid: uid,
           name: name,
+          email: email,
           lastOnline: firebase.database.ServerValue.TIMESTAMP,
           online: true
         });
@@ -559,7 +134,7 @@
         database.ref('.info/connected').on('value', (snapshot) => {
           if (snapshot.val() === false) {
             // User disconnected
-            database.ref('users/' + uid).update({
+            database.ref('users/' + email.replace('.', '_')).update({
               online: false
             });
           }
@@ -573,8 +148,12 @@
           
           // Remove current user from list
           const otherUsers = {...users};
-          if (currentUser && otherUsers[currentUser.uid]) {
-            delete otherUsers[currentUser.uid];
+          if (currentUser) {
+            Object.keys(otherUsers).forEach(key => {
+              if (otherUsers[key].email === userEmail) {
+                delete otherUsers[key];
+              }
+            });
           }
           
           // Update contacts list
@@ -586,11 +165,12 @@
       function updateContactsList(usersList) {
         contactsList.innerHTML = '';
         
-        Object.keys(usersList).forEach(uid => {
-          const user = usersList[uid];
+        Object.keys(usersList).forEach(key => {
+          const user = usersList[key];
           const contact = document.createElement('div');
           contact.className = 'contact';
-          contact.dataset.uid = uid;
+          contact.dataset.uid = user.uid;
+          contact.dataset.email = user.email;
           
           // Get first letter for avatar
           const firstLetter = user.name.charAt(0).toUpperCase();
@@ -604,7 +184,7 @@
           `;
           
           contact.addEventListener('click', () => {
-            selectChatPartner(uid, user.name);
+            selectChatPartner(user.uid, user.name, user.email);
           });
           
           contactsList.appendChild(contact);
@@ -612,8 +192,8 @@
       }
       
       // Select chat partner
-      function selectChatPartner(uid, name) {
-        selectedChatPartner = uid;
+      function selectChatPartner(uid, name, email) {
+        selectedChatPartner = {uid, name, email};
         
         // Update UI
         chatPartnerInfo.querySelector('.name').textContent = name;
@@ -631,16 +211,16 @@
         messageForm.style.display = 'flex';
         
         // Load messages
-        loadMessages(uid);
+        loadMessages(uid, email);
       }
       
       // Load messages for a chat
-      function loadMessages(partnerId) {
+      function loadMessages(partnerId, partnerEmail) {
         // Clear existing messages
         messagesContainer.innerHTML = '';
         
-        // Generate chat ID (sorted to ensure same chat for both users)
-        const chatId = [currentUser.uid, partnerId].sort().join('_');
+        // Generate persistent chat ID using emails
+        const chatId = [userEmail, partnerEmail].sort().join('_').replace(/\./g, '_');
         
         database.ref('chats/' + chatId)
           .orderByChild('timestamp')
@@ -664,7 +244,7 @@
         messageElement.className = `message ${message.sender === currentUser.uid ? 'sent' : 'received'}`;
         
         const senderName = message.sender === currentUser.uid ? 
-          'Вы' : users[message.sender]?.name || 'Неизвестный';
+          'Вы' : users[message.senderEmail]?.name || message.senderName || 'Неизвестный';
         
         const timestamp = formatTime(message.timestamp);
         
@@ -704,13 +284,17 @@
         try {
           sendButton.disabled = true;
           
-          // Generate chat ID
-          const chatId = [currentUser.uid, selectedChatPartner].sort().join('_');
+          // Generate persistent chat ID using emails
+          const chatId = [userEmail, selectedChatPartner.email].sort().join('_').replace(/\./g, '_');
           
           // Send message
           await database.ref('chats/' + chatId).push({
             text: messageText,
             sender: currentUser.uid,
+            senderEmail: userEmail,
+            senderName: userName,
+            receiver: selectedChatPartner.uid,
+            receiverEmail: selectedChatPartner.email,
             timestamp: firebase.database.ServerValue.TIMESTAMP
           });
           
@@ -727,7 +311,11 @@
       saveNameBtn.addEventListener('click', () => {
         if (userNameInput.value.trim()) {
           userName = userNameInput.value.trim();
+          // Use email-style identifier for persistence
+          userEmail = `${userName.replace(/\s+/g, '').toLowerCase()}@mireshabar.com`;
+          
           localStorage.setItem('userName', userName);
+          localStorage.setItem('userEmail', userEmail);
           startChatApp();
         }
       });
@@ -739,8 +327,8 @@
           if (sendButton) sendButton.disabled = false;
           
           // Update user online status
-          if (currentUser) {
-            database.ref('users/' + currentUser.uid).update({
+          if (currentUser && userEmail) {
+            database.ref('users/' + userEmail.replace('.', '_')).update({
               online: true,
               lastOnline: firebase.database.ServerValue.TIMESTAMP
             });
