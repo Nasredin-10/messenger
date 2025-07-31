@@ -12,13 +12,14 @@
   <meta name="theme-color" content="#6a1b9a">
   <meta name="description" content="Мессенджер MiresHabar">
   
-<link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM2YTFiOWEiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vY2RuaWNvbnMtcG5nLmZsYXRpY29uLmNvbS81MTIvMjY5Mi8yNjkyMjc5LnBuZyIsCiAgICAgICJzaXplcyI6ICIxOTJ4MTkyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJodHRwczovL2Nkbmljb25zLXBuZy5mbGF0aWNvbi5jb20vNTEyLzI2OTIvMjY5MjI3OS5wbmciLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0KICBdCn0=">
+  <!-- Base64 Manifest -->
+  <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM2YTFiOWEiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1nLmljb25zOC5jb20vaW9zLzE4MC9tZXNzYWdpbmctYXBwLnBuZyIsCiAgICAgICJzaXplcyI6ICIxODB4MTgwIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJodHRwczovL2ltZy5pY29ucy44LmNvbS9pb3MvNTEyL21lc3NhZ2luZy1hcHAucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9CiAgXQp9">
+  
   <!-- External Icons -->
-  <link rel="apple-touch-icon" href="https://img.icons8.com/flat/1024/tea.png">
-  <link rel="icon" type="image/png" href="https://img.icons8.com/flat/1024/tea.png">
+  <link rel="apple-touch-icon" href="https://img.icons8.com/ios/180/messaging-app.png">
+  <link rel="icon" type="image/png" href="https://img.icons8.com/ios/192/messaging-app.png">
   
   <style>
-    /* Весь ваш CSS остался без изменений */
     :root {
       --primary: #6a1b9a;
       --primary-dark: #4a148c;
@@ -201,7 +202,6 @@
   </style>
 </head>
 <body>
-  <!-- Весь ваш HTML остался без изменений -->
   <div id="app">
     <header>
       <h1>MiresHabar</h1>
@@ -225,8 +225,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
   <script>
-    // Весь ваш JavaScript остался без изменений, кроме обновления ссылки на иконку в Service Worker
-    
     // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAmRBqxgDcPQDIObFLR5wGM2DbYkaFjkkg",
@@ -394,7 +392,7 @@
           'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js',
           'https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js',
           'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js',
-          'https://img.icons8.com/flat/1024/tea.png'
+          'https://img.icons8.com/ios/192/messaging-app.png'
         ];
 
         self.addEventListener('install', (e) => {
