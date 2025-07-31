@@ -13,7 +13,7 @@
   <meta name="description" content="Анонимный мессенджер с личными чатами">
   
   <!-- Base64 Manifest -->
-  <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM2YTFiOWEiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1nLmljb25zOC5jb20vZmxhdC8xMDI0L3RlYS5wbmciLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbGF0LzEwMjQvdGVhLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ">
+  <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM2YTFiOWEiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1gLmljb25zOC5jb20vZmxhdC8xMDI0L3RlYS5wbmciLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbGF0LzEwMjQvdGVhLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ">
   
   <!-- External Icons -->
   <link rel="apple-touch-icon" href="https://img.icons8.com/flat/1024/tea.png">
@@ -677,7 +677,6 @@
       const database = firebase.database();
       
       // DOM elements
-      const chatContainer = document.getElementById('chatContainer');
       const currentUserIdEl = document.getElementById('currentUserId');
       const userAvatar = document.getElementById('userAvatar');
       const userStatusIndicator = document.getElementById('userStatusIndicator');
@@ -700,7 +699,6 @@
       let currentUser = null;
       let selectedChatPartner = null;
       let users = {};
-      let userColors = {};
       let lastMessages = {};
       let unreadMessages = {};
       let userStatus = 'online';
@@ -749,12 +747,13 @@
       function saveUser(uid) {
         const userRef = database.ref('users/' + uid);
         
+        // Set user online status
         userRef.set({
           lastOnline: firebase.database.ServerValue.TIMESTAMP,
           online: true
         });
         
-        // Set up disconnect handler
+        // Update on connection status change
         database.ref('.info/connected').on('value', (snapshot) => {
           if (snapshot.val() === true) {
             userRef.update({
@@ -769,12 +768,19 @@
             userStatusIndicator.className = 'status-indicator status-offline';
           }
         });
+        
+        // Update on page unload
+        window.addEventListener('beforeunload', () => {
+          userRef.update({ online: false });
+        });
       }
       
       // Load users from database
       function loadUsers() {
-        database.ref('users').on('value', (snapshot) => {
+        const usersRef = database.ref('users');
+        usersRef.on('value', (snapshot) => {
           users = snapshot.val() || {};
+          console.log("Users loaded:", Object.keys(users).length);
           
           // Remove current user from list
           const otherUsers = {...users};
@@ -800,6 +806,7 @@
         
         Object.keys(usersList).forEach(uid => {
           const user = usersList[uid];
+          if (!user) return;
           
           // Create contact element
           const contact = document.createElement('div');
@@ -855,17 +862,14 @@
           }
         });
         
-        // Hide groups if empty
-        if (onlineCount === 0) {
-          document.querySelector('.contacts-group:first-child').style.display = 'none';
-        }
-        if (offlineCount === 0) {
-          document.querySelector('.contacts-group:last-child').style.display = 'none';
-        }
+        // Show/hide groups based on content
+        document.querySelector('.contacts-group:first-child').style.display = onlineCount ? 'block' : 'none';
+        document.querySelector('.contacts-group:last-child').style.display = offlineCount ? 'block' : 'none';
       }
       
       // Setup message listeners
       function setupMessageListeners() {
+        // Listen for all users
         database.ref('users').on('value', (snapshot) => {
           const users = snapshot.val() || {};
           
@@ -881,6 +885,7 @@
               .limitToLast(1)
               .on('child_added', (snapshot) => {
                 const message = snapshot.val();
+                if (!message) return;
                 
                 // Skip if message is from current user
                 if (message.sender === currentUser.uid) return;
@@ -924,13 +929,15 @@
       
       // Select chat partner
       function selectChatPartner(uid) {
+        if (!users[uid]) return;
+        
         selectedChatPartner = uid;
         
         // Update UI
         chatPartnerInfo.querySelector('.partner-name').textContent = `Пользователь ${shortenUid(uid)}`;
         
-        const statusText = users[uid]?.online ? 'онлайн' : 'был(а) недавно';
-        const statusClass = users[uid]?.online ? 'partner-online' : 'partner-offline';
+        const statusText = users[uid].online ? 'онлайн' : 'был(а) недавно';
+        const statusClass = users[uid].online ? 'partner-online' : 'partner-offline';
         
         chatPartnerInfo.querySelector('.partner-status').innerHTML = `
           <div class="partner-status-dot ${statusClass}"></div>
@@ -983,8 +990,19 @@
               return;
             }
             
+            // Convert to array and sort by timestamp
+            const messagesArray = [];
             Object.keys(messages).forEach(key => {
-              const message = messages[key];
+              messagesArray.push({
+                id: key,
+                ...messages[key]
+              });
+            });
+            
+            messagesArray.sort((a, b) => a.timestamp - b.timestamp);
+            
+            // Display messages
+            messagesArray.forEach(message => {
               displayMessage(message);
             });
             
@@ -998,9 +1016,6 @@
         const messageElement = document.createElement('div');
         const isSent = message.sender === currentUser.uid;
         messageElement.className = `message ${isSent ? 'sent' : 'received'}`;
-        
-        // Generate color for avatar
-        const color = generateColorFromUid(message.sender);
         
         const timestamp = formatTime(message.timestamp);
         const senderName = isSent ? 'Вы' : 'Собеседник';
