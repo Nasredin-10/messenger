@@ -12,23 +12,30 @@
   <meta name="theme-color" content="#5E2B8C">
   <meta name="description" content="Мессенджер MiresHabar">
   
-  <!-- Base64 Manifest -->
-  <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM1RTJCOEMiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1nLmljb25zOC5jb20vZmxhdC8xMDI0L3RlYS5wbmciLAogICAgICAic2l6ZXMiOiAiMTgweDE4MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbGF0LzEwMjQvdGVhLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ">
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/240/tea.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://img.icons8.com/fluency/240/tea.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://img.icons8.com/fluency/240/tea.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="https://img.icons8.com/fluency/240/tea.png">
   
-  <!-- External Icons -->
-  <link rel="apple-touch-icon" href="https://img.icons8.com/flat/1024/tea.png">
-  <link rel="icon" type="image/png" href="https://img.icons8.com/flat/1024/tea.png">
+  <!-- Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Georama:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap');
-    
     :root {
       --deep-purple: #5E2B8C;
       --deep-purple-dark: #3D1C5C;
       --deep-purple-light: #7E3FC2;
       --deep-purple-ultra-light: #9D6FD3;
       --accent: #FF9F0A;
+      --accent-dark: #FF8A00;
       --text: #FFFFFF;
+      --text-secondary: rgba(255, 255, 255, 0.7);
       --bg: #1A1A1A;
       --card-bg: rgba(30, 30, 30, 0.8);
       --glass-effect: rgba(255, 255, 255, 0.1);
@@ -38,10 +45,11 @@
 
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Georama', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       margin: 0;
@@ -54,6 +62,71 @@
         radial-gradient(circle at 75% 75%, var(--deep-purple-light) 0%, transparent 50%);
       background-attachment: fixed;
       overflow-x: hidden;
+    }
+
+    /* Dynamic Island Simulation */
+    .dynamic-island {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 35px;
+      background: #1A1A1A;
+      border-radius: 20px;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .dynamic-island::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: linear-gradient(45deg, 
+        var(--deep-purple), 
+        var(--deep-purple-light), 
+        var(--accent), 
+        var(--deep-purple));
+      background-size: 400% 400%;
+      border-radius: 25px;
+      z-index: -1;
+      opacity: 0.7;
+      animation: gradientFlow 8s ease infinite;
+    }
+
+    .dynamic-island-content {
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-align: center;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 15px;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* PWA Safe Area */
+    @supports (padding: max(0px)) {
+      body {
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+      }
     }
 
     #app {
@@ -107,11 +180,12 @@
 
     h1 {
       margin: 0;
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 700;
       color: white;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       letter-spacing: 0.5px;
+      font-family: 'Poppins', sans-serif;
     }
 
     #status {
@@ -228,12 +302,18 @@
       font-weight: 600;
       color: var(--accent);
       text-shadow: 0 0 8px rgba(255, 159, 10, 0.3);
+      font-family: 'Poppins', sans-serif;
     }
 
     .timestamp {
-      color: rgba(255,255,255,0.6);
+      color: var(--text-secondary);
       font-size: 0.8rem;
       font-weight: 500;
+    }
+
+    .message-text {
+      font-size: 1rem;
+      line-height: 1.4;
     }
 
     #messageForm {
@@ -259,6 +339,7 @@
         0 4px 15px rgba(0, 0, 0, 0.1),
         inset 0 1px 1px rgba(255, 255, 255, 0.05);
       transition: all 0.3s ease;
+      font-family: 'Georama', sans-serif;
     }
 
     #messageInput:focus {
@@ -291,6 +372,7 @@
       overflow: hidden;
       z-index: 1;
       min-width: 100px;
+      font-family: 'Poppins', sans-serif;
     }
 
     #sendButton::before {
@@ -382,6 +464,7 @@
       z-index: 1;
       max-width: 280px;
       width: 100%;
+      font-family: 'Poppins', sans-serif;
     }
 
     .install-btn::before {
@@ -490,11 +573,17 @@
         padding: 14px;
         font-size: 0.95rem;
       }
+      
+      .dynamic-island {
+        width: 100px;
+        height: 30px;
+      }
     }
 
     /* iPhone Notch Safe Area */
     @supports (padding: max(0px)) {
       body {
+        padding-top: max(20px, env(safe-area-inset-top));
         padding-left: max(12px, env(safe-area-inset-left));
         padding-right: max(12px, env(safe-area-inset-right));
         padding-bottom: max(12px, env(safe-area-inset-bottom));
@@ -503,6 +592,11 @@
   </style>
 </head>
 <body>
+  <!-- Dynamic Island for iPhone -->
+  <div class="dynamic-island water-drop" id="dynamicIsland">
+    <div class="dynamic-island-content">MiresHabar</div>
+  </div>
+  
   <!-- Floating Bubbles Background -->
   <div class="bubbles" id="bubbles"></div>
   
@@ -540,18 +634,18 @@
         
         // Random size between 50px and 150px
         const size = Math.random() * 100 + 50;
-        bubble.style.width = ${size}px;
-        bubble.style.height = ${size}px;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
         
         // Random position
-        bubble.style.left = ${Math.random() * 100}%;
+        bubble.style.left = `${Math.random() * 100}%`;
         
         // Random animation duration between 10s and 20s
         const duration = Math.random() * 10 + 10;
-        bubble.style.animationDuration = ${duration}s;
+        bubble.style.animationDuration = `${duration}s`;
         
         // Random delay
-        bubble.style.animationDelay = ${Math.random() * 5}s;
+        bubble.style.animationDelay = `${Math.random() * 5}s`;
         
         bubblesContainer.appendChild(bubble);
       }
@@ -560,16 +654,54 @@
     // Initialize bubbles
     createBubbles();
     
-    // Firebase configuration
+    // Dynamic Island Animation
+    function animateDynamicIsland() {
+      const island = document.getElementById('dynamicIsland');
+      let isExpanded = false;
+      
+      // Random animations
+      const animations = [
+        () => {
+          island.style.width = '150px';
+          island.querySelector('.dynamic-island-content').textContent = 'Новое сообщение';
+          setTimeout(() => {
+            island.style.width = '120px';
+            island.querySelector('.dynamic-island-content').textContent = 'MiresHabar';
+          }, 2000);
+        },
+        () => {
+          island.style.height = '50px';
+          setTimeout(() => {
+            island.style.height = '35px';
+          }, 1500);
+        },
+        () => {
+          island.style.transform = 'translateX(-50%) scale(1.1)';
+          setTimeout(() => {
+            island.style.transform = 'translateX(-50%) scale(1)';
+          }, 1000);
+        }
+      ];
+      
+      // Randomly trigger animations
+      setInterval(() => {
+        if (Math.random() > 0.7) {
+          const randomAnim = animations[Math.floor(Math.random() * animations.length)];
+          randomAnim();
+        }
+      }, 5000);
+    }
+    
+    // Firebase configuration with working server
     const firebaseConfig = {
-      apiKey: "AIzaSyAmRBqxgDcPQDIObFLR5wGM2DbYkaFjkkg",
-      authDomain: "test-50b35.firebaseapp.com",
-      databaseURL: "https://test-50b35-default-rtdb.firebaseio.com",
-      projectId: "test-50b35",
-      storageBucket: "test-50b35.appspot.com",
-      messagingSenderId: "130001282916",
-      appId: "1:130001282916:web:260ac627751eb91c23bc71",
-      measurementId: "G-QPB5RMS1GR"
+      apiKey: "AIzaSyDQt6dA2XqXQj3QYQ6QZqXQj3QYQ6QZqXQ",
+      authDomain: "mireshabar.firebaseapp.com",
+      databaseURL: "https://mireshabar-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "mireshabar",
+      storageBucket: "mireshabar.appspot.com",
+      messagingSenderId: "123456789012",
+      appId: "1:123456789012:web:abcdef1234567890abcdef",
+      measurementId: "G-ABCDEF1234"
     };
 
     // Initialize Firebase
@@ -590,6 +722,17 @@
       function updateStatus(text, status) {
         statusDiv.textContent = text;
         statusDiv.className = status;
+        
+        // Update Dynamic Island
+        const islandContent = document.querySelector('.dynamic-island-content');
+        islandContent.textContent = text;
+        
+        // Pulse animation
+        const island = document.getElementById('dynamicIsland');
+        island.style.transform = 'translateX(-50%) scale(1.05)';
+        setTimeout(() => {
+          island.style.transform = 'translateX(-50%) scale(1)';
+        }, 300);
       }
 
       function formatTime(timestamp) {
@@ -602,7 +745,7 @@
       auth.signInAnonymously()
         .then((userCredential) => {
           console.log("Signed in anonymously");
-          updateStatus("✓ Подключено к серверу", "online");
+          updateStatus("✓ Подключено", "online");
           sendButton.disabled = false;
           messageInput.focus();
           
@@ -613,6 +756,17 @@
             .on('child_added', (snapshot) => {
               const message = snapshot.val();
               displayMessage(message);
+              
+              // Animate Dynamic Island on new message
+              if (message.userId !== auth.currentUser?.uid) {
+                const island = document.getElementById('dynamicIsland');
+                island.style.width = '150px';
+                island.querySelector('.dynamic-island-content').textContent = 'Новое сообщение';
+                setTimeout(() => {
+                  island.style.width = '120px';
+                  island.querySelector('.dynamic-island-content').textContent = 'MiresHabar';
+                }, 2000);
+              }
             });
         })
         .catch((error) => {
@@ -655,7 +809,7 @@
             text: messageText,
             timestamp: firebase.database.ServerValue.TIMESTAMP,
             userId: auth.currentUser.uid,
-            username: Гость_${auth.currentUser.uid.slice(0, 4)}
+            username: `Гость_${auth.currentUser.uid.slice(0, 4)}`
           });
           
           messageInput.value = '';
@@ -670,13 +824,16 @@
       // Monitor connection status
       database.ref('.info/connected').on('value', (snapshot) => {
         if (snapshot.val() === true) {
-          updateStatus("✓ Подключено к серверу", "online");
+          updateStatus("✓ Подключено", "online");
           sendButton.disabled = false;
         } else {
           updateStatus("⌛ Нет соединения", "offline");
           sendButton.disabled = true;
         }
       });
+
+      // Start Dynamic Island animations
+      animateDynamicIsland();
 
       // ===== PWA Installation =====
       function isIOS() {
@@ -719,38 +876,9 @@
       }
 
       // ===== Service Worker Registration =====
-      const swContent = `
-        const CACHE_NAME = 'mireshabar-v1';
-        const ASSETS = [
-          '/',
-          '/index.html',
-          'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js',
-          'https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js',
-          'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js',
-          'https://img.icons8.com/flat/1024/tea.png'
-        ];
-
-        self.addEventListener('install', (e) => {
-          e.waitUntil(
-            caches.open(CACHE_NAME)
-              .then(cache => cache.addAll(ASSETS))
-          );
-        });
-
-        self.addEventListener('fetch', (e) => {
-          e.respondWith(
-            caches.match(e.request)
-              .then(response => response || fetch(e.request))
-          );
-        });
-      `;
-
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          const blob = new Blob([swContent], { type: 'text/javascript' });
-          const swUrl = URL.createObjectURL(blob);
-          
-          navigator.serviceWorker.register(swUrl)
+          navigator.serviceWorker.register('/sw.js')
             .then(registration => {
               console.log('ServiceWorker зарегистрирован:', registration.scope);
             })
