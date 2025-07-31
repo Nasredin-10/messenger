@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>MiresHabar - Премиум Мессенджер</title>
+  <title>MiresHabar - Мессенджер</title>
   
   <!-- PWA Configuration -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MiresHabar">
   <meta name="theme-color" content="#6a1b9a">
-  <meta name="description" content="Премиум мессенджер MiresHabar с расширенными функциями">
+  <meta name="description" content="Мессенджер MiresHabar">
   
   <!-- Base64 Manifest -->
   <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM2YTFiOWEiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1nLmljb25zOC5jb20vZmxhdC8xMDI0L3RlYS5wbmciLAogICAgICAic2l6ZXMiOiAiMTgweDE4MCIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbGF0LzEwMjQvdGVhLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ">
@@ -19,41 +19,33 @@
   <link rel="apple-touch-icon" href="https://img.icons8.com/flat/1024/tea.png">
   <link rel="icon" type="image/png" href="https://img.icons8.com/flat/1024/tea.png">
   
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
   
   <style>
-    /* Обновленная цветовая схема */
     :root {
       --primary: #6a1b9a;
       --primary-dark: #4a148c;
       --primary-light: #9c27b0;
       --accent: #ff9800;
-      --accent-light: #ffb74d;
+      --accent-dark: #f57c00;
       --text: #ffffff;
-      --text-secondary: #b0b0b0;
+      --text-secondary: rgba(255, 255, 255, 0.7);
       --bg: #121212;
       --card-bg: #1e1e1e;
-      --card-hover: #2a2a2a;
+      --card-bg-light: #2d2d2d;
       --success: #4caf50;
       --error: #f44336;
-      --warning: #ff9800;
-      --online: #4caf50;
-      --offline: #f44336;
-      --typing: #ff9800;
-      --gradient-start: #4a148c;
-      --gradient-end: #6a1b9a;
+      --warning: #ffc107;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
-      background: linear-gradient(135deg, var(--bg), #1a1a2e);
+      font-family: 'Montserrat', system-ui, sans-serif;
+      background: var(--bg);
       color: var(--text);
       margin: 0;
       padding: 0;
@@ -63,921 +55,413 @@
       overflow-x: hidden;
     }
 
-    /* Шапка приложения */
-    #app-header {
-      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-      padding: 18px 25px;
+    #app {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+      flex: 1;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      flex-direction: column;
+      height: 100vh;
     }
 
-    .header-left, .header-right {
+    header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 16px 20px;
+      margin-bottom: 0;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      z-index: 10;
       display: flex;
       align-items: center;
-      gap: 20px;
-    }
-
-    .app-logo {
-      display: flex;
-      align-items: center;
+      justify-content: center;
       gap: 12px;
     }
 
-    .app-icon {
-      width: 36px;
-      height: 36px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-
-    .app-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      background: linear-gradient(to right, #fff, #ffd180);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 15px;
-    }
-
-    .header-btn {
-      background: rgba(255, 255, 255, 0.15);
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 18px;
-    }
-
-    .header-btn:hover {
-      background: rgba(255, 255, 255, 0.25);
-      transform: translateY(-2px);
-    }
-
-    /* Основной контейнер приложения */
-    #app {
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-      padding: 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* Боковая панель контактов */
-    #contacts-panel {
-      width: 100%;
-      background: var(--card-bg);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      display: none;
-    }
-
-    .contacts-header {
-      padding: 20px;
-      background: rgba(106, 27, 154, 0.3);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .contacts-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-
-    .contacts-search {
-      padding: 10px 20px;
-      background: rgba(255, 255, 255, 0.05);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 12px 15px;
-      background: rgba(255, 255, 255, 0.08);
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-size: 16px;
-    }
-
-    .search-input::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    .contacts-list {
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .contact-item {
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .contact-item:hover {
-      background: rgba(106, 27, 154, 0.2);
-    }
-
-    .contact-avatar {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary-light), var(--accent));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      color: white;
-      font-weight: bold;
-    }
-
-    .contact-info {
-      flex: 1;
-    }
-
-    .contact-name {
-      font-weight: 600;
-      font-size: 16px;
-    }
-
-    .contact-status {
-      font-size: 13px;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--offline);
-    }
-
-    .status-dot.online {
-      background: var(--online);
-    }
-
-    .status-dot.typing {
-      background: var(--typing);
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 0.5; }
-      50% { opacity: 1; }
-      100% { opacity: 0.5; }
-    }
-
-    /* Статус подключения */
-    #status-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-      background: rgba(30, 30, 46, 0.8);
-      border-radius: 12px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .connection-status {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
-    }
-
-    .status-indicator {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .status-indicator.online {
-      background: var(--online);
-      box-shadow: 0 0 8px var(--online);
-    }
-
-    .status-indicator.offline {
-      background: var(--offline);
-      box-shadow: 0 0 8px var(--offline);
-    }
-
-    .status-indicator.loading {
-      background: var(--warning);
-      box-shadow: 0 0 8px var(--warning);
-      animation: pulse 1.5s infinite;
-    }
-
-    .typing-indicator {
-      color: var(--accent-light);
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 14px;
-    }
-
-    .typing-dots {
-      display: flex;
-      gap: 4px;
-    }
-
-    .typing-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent-light);
-      animation: bounce 1.5s infinite;
-    }
-
-    .typing-dot:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .typing-dot:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
-    /* Область сообщений */
-    #chat-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--card-bg);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
-    }
-
-    #messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 25px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      background: radial-gradient(circle at top left, rgba(74, 20, 140, 0.1), transparent 60%);
-    }
-
-    .message {
-      max-width: 80%;
-      padding: 16px 20px;
-      border-radius: 18px;
-      position: relative;
-      animation: fadeIn 0.4s ease;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s ease;
-    }
-
-    .message:hover {
-      transform: translateY(-3px);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .message-incoming {
-      align-self: flex-start;
-      background: linear-gradient(135deg, rgba(74, 20, 140, 0.4), rgba(74, 20, 140, 0.2));
-      border-bottom-left-radius: 5px;
-    }
-
-    .message-outgoing {
-      align-self: flex-end;
-      background: linear-gradient(135deg, rgba(106, 27, 154, 0.5), rgba(74, 20, 140, 0.4));
-      border-bottom-right-radius: 5px;
-    }
-
-    .message-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .username {
-      font-weight: 600;
-      color: var(--accent);
+    .logo {
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .user-badge {
-      background: var(--accent);
-      color: black;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      font-weight: bold;
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     }
 
-    .timestamp {
-      color: rgba(255, 255, 255, 0.6);
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: white;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-text {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.6rem;
+      background: linear-gradient(to right, #fff, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    #status {
+      padding: 10px 12px;
+      border-radius: 0;
+      margin-bottom: 0;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.9rem;
+      background: var(--card-bg);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .online { 
+      background: rgba(46, 125, 50, 0.15); 
+      color: #a5d6a7;
+      border-bottom: 2px solid var(--success);
+    }
+    .offline { 
+      background: rgba(198, 40, 40, 0.15); 
+      color: #ef9a9a;
+      border-bottom: 2px solid var(--error);
+    }
+    .loading { 
+      background: rgba(255, 167, 38, 0.15); 
+      color: #ffe0b2;
+      border-bottom: 2px solid var(--warning);
+    }
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .message {
+      background: var(--card-bg);
+      padding: 12px 16px;
+      border-radius: 16px;
+      animation: fadeIn 0.3s ease;
+      max-width: 85%;
+      position: relative;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .message.current-user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-top-right-radius: 4px;
+    }
+
+    .message.other-user {
+      align-self: flex-start;
+      border-top-left-radius: 4px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
       font-size: 0.85rem;
     }
 
-    .message-content {
-      line-height: 1.5;
-      font-size: 16px;
+    .username {
+      font-weight: 600;
+      color: var(--accent);
     }
 
-    .message-actions {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      display: none;
-      gap: 5px;
-    }
-
-    .message:hover .message-actions {
-      display: flex;
-    }
-
-    .msg-action-btn {
-      background: rgba(255, 255, 255, 0.15);
-      border: none;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .message.current-user .username {
       color: white;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s ease;
     }
 
-    .msg-action-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(1.1);
+    .timestamp {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      margin-left: 8px;
     }
 
-    /* Форма отправки сообщений */
-    #message-form-container {
-      padding: 20px;
-      background: rgba(30, 30, 46, 0.8);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+    .message-text {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .message.current-user .message-text {
+      color: white;
+    }
+
+    .input-container {
+      background: var(--card-bg);
+      padding: 12px 16px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     #messageForm {
       display: flex;
-      gap: 12px;
-    }
-
-    .input-group {
-      flex: 1;
-      display: flex;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 50px;
-      padding: 5px 5px 5px 20px;
-      align-items: center;
+      gap: 8px;
     }
 
     #messageInput {
       flex: 1;
-      padding: 14px 0;
+      padding: 12px 16px;
       border: none;
-      background: transparent;
+      border-radius: 24px;
+      background: var(--card-bg-light);
       color: white;
-      font-size: 16px;
+      font-size: 0.95rem;
       outline: none;
+      transition: all 0.2s;
     }
 
-    .input-actions {
-      display: flex;
-      gap: 5px;
+    #messageInput:focus {
+      box-shadow: 0 0 0 2px var(--accent);
     }
 
-    .input-btn {
-      background: transparent;
-      border: none;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255, 255, 255, 0.7);
-      cursor: pointer;
-      font-size: 18px;
-      transition: all 0.2s ease;
-    }
-
-    .input-btn:hover {
-      color: var(--accent);
-      background: rgba(255, 255, 255, 0.1);
+    #messageInput::placeholder {
+      color: rgba(255,255,255,0.4);
     }
 
     #sendButton {
-      background: var(--accent);
-      color: black;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
       border: none;
-      border-radius: 50%;
-      width: 52px;
-      height: 52px;
+      border-radius: 24px;
+      padding: 0 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 20px;
-      box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+      min-width: 48px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
     #sendButton:hover {
-      background: var(--accent-light);
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 6px 15px rgba(255, 152, 0, 0.4);
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      transform: translateY(-1px);
     }
 
     #sendButton:disabled {
       background: #555;
       cursor: not-allowed;
       transform: none;
-      box-shadow: none;
     }
 
-    /* Кнопка установки PWA */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .clear-btn {
+      background: transparent;
+      color: var(--text-secondary);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .clear-btn:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--error);
+    }
+
+    .clear-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* Install Button Styles */
     .install-btn {
       background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: white;
       border: none;
-      border-radius: 50px;
-      padding: 14px 32px;
+      border-radius: 24px;
+      padding: 12px 24px;
       margin: 20px auto;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: block;
       cursor: pointer;
       font-weight: 600;
-      font-size: 16px;
       text-align: center;
       transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(106, 27, 154, 0.4);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     .install-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(106, 27, 154, 0.6);
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     }
 
-    /* Модальные окна */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 1000;
+    /* Empty state */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(5px);
-    }
-
-    .modal-content {
-      background: var(--card-bg);
-      border-radius: 20px;
-      width: 90%;
-      max-width: 500px;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      animation: modalIn 0.4s ease;
-    }
-
-    @keyframes modalIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .modal-header {
-      padding: 25px;
-      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
       text-align: center;
-    }
-
-    .modal-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: white;
-    }
-
-    .modal-body {
-      padding: 30px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
+      padding: 20px;
       color: var(--text-secondary);
     }
 
-    .form-input {
-      width: 100%;
-      padding: 14px 18px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
+    .empty-state img {
+      width: 100px;
+      height: 100px;
+      opacity: 0.5;
+      margin-bottom: 20px;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    /* Admin badge */
+    .admin-badge {
+      background: var(--error);
       color: white;
-      font-size: 16px;
+      font-size: 0.6rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-left: 6px;
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
-    .form-input:focus {
-      border-color: var(--accent);
-      outline: none;
-    }
-
-    .modal-footer {
-      padding: 20px;
-      display: flex;
-      gap: 15px;
-      justify-content: flex-end;
-      background: rgba(30, 30, 30, 0.8);
-    }
-
-    .btn {
-      padding: 12px 28px;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
-      font-size: 16px;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: black;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-light);
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Адаптивность */
-    @media (min-width: 768px) {
-      #app {
-        flex-direction: row;
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      header {
+        padding: 12px 16px;
       }
       
-      #contacts-panel {
-        display: block;
-        width: 300px;
-        flex-shrink: 0;
+      h1 {
+        font-size: 1.3rem;
       }
       
-      .app-logo {
-        gap: 15px;
+      .logo-text {
+        font-size: 1.4rem;
       }
       
-      .app-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 20px;
-      }
-    }
-
-    @media (max-width: 767px) {
-      #app-header {
-        padding: 15px;
-      }
-      
-      .app-title {
-        font-size: 1.5rem;
-      }
-      
-      .header-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 16px;
+      .logo-icon {
+        width: 24px;
+        height: 24px;
       }
       
       #messageForm {
-        flex-direction: column;
+        gap: 6px;
       }
       
-      .input-group {
-        padding: 5px 5px 5px 15px;
+      #messageInput {
+        padding: 10px 14px;
+        font-size: 0.9rem;
       }
       
       #sendButton {
-        width: 100%;
-        height: 52px;
-        border-radius: 12px;
+        padding: 0 16px;
       }
       
-      .modal-content {
-        width: 95%;
+      .message {
+        max-width: 90%;
+      }
+    }
+
+    /* iPhone X and similar notch support */
+    @supports (padding: max(0px)) {
+      body {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      
+      .input-container {
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
       }
     }
   </style>
 </head>
 <body>
-  <!-- Обновленная структура приложения -->
-  <header id="app-header">
-    <div class="header-left">
-      <div class="app-logo">
-        <div class="app-icon">
-          <i class="fas fa-comment-alt"></i>
-        </div>
-        <h1 class="app-title">MiresHabar</h1>
-      </div>
-    </div>
-    
-    <div class="header-right">
-      <div class="header-actions">
-        <button class="header-btn" id="contactsToggle">
-          <i class="fas fa-users"></i>
-        </button>
-        <button class="header-btn" id="themeToggle">
-          <i class="fas fa-moon"></i>
-        </button>
-        <button class="header-btn" id="settingsToggle">
-          <i class="fas fa-cog"></i>
-        </button>
-      </div>
-    </div>
-  </header>
-  
   <div id="app">
-    <!-- Панель контактов -->
-    <aside id="contacts-panel">
-      <div class="contacts-header">
-        <h2 class="contacts-title">Контакты</h2>
-        <button class="header-btn" id="newChatBtn">
-          <i class="fas fa-plus"></i>
-        </button>
+    <header>
+      <div class="logo">
+        <img src="https://img.icons8.com/flat/1024/tea.png" alt="Логотип" class="logo-icon">
+        <h1><span class="logo-text">MiresHabar</span></h1>
       </div>
-      
-      <div class="contacts-search">
-        <input type="text" class="search-input" placeholder="Поиск контактов...">
-      </div>
-      
-      <div class="contacts-list">
-        <div class="contact-item">
-          <div class="contact-avatar">A</div>
-          <div class="contact-info">
-            <div class="contact-name">Александр</div>
-            <div class="contact-status">
-              <span class="status-dot online"></span>
-              <span>В сети</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="contact-item">
-          <div class="contact-avatar">М</div>
-          <div class="contact-info">
-            <div class="contact-name">Мария</div>
-            <div class="contact-status">
-              <span class="status-dot typing"></span>
-              <span>Печатает...</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="contact-item">
-          <div class="contact-avatar">И</div>
-          <div class="contact-info">
-            <div class="contact-name">Иван Петров</div>
-            <div class="contact-status">
-              <span class="status-dot"></span>
-              <span>Был в сети 2 часа назад</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="contact-item">
-          <div class="contact-avatar">Е</div>
-          <div class="contact-info">
-            <div class="contact-name">Екатерина</div>
-            <div class="contact-status">
-              <span class="status-dot online"></span>
-              <span>В сети</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </aside>
+    </header>
+
+    <div id="status" class="loading">Подключение к серверу...</div>
     
-    <!-- Основной чат -->
-    <main id="chat-container">
-      <div id="status-bar">
-        <div class="connection-status">
-          <span class="status-indicator online"></span>
-          <span>Стабильное соединение</span>
-        </div>
-        <div class="typing-indicator">
-          <i class="fas fa-pencil-alt"></i>
-          <span>Мария печатает...</span>
-          <div class="typing-dots">
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-          </div>
-        </div>
-      </div>
+    <div class="chat-container">
+      <div id="messages"></div>
       
-      <div id="messages">
-        <div class="message message-incoming">
-          <div class="message-header">
-            <div class="username">
-              Мария <span class="user-badge">VIP</span>
-            </div>
-            <div class="timestamp">10:25</div>
-          </div>
-          <div class="message-content">
-            Привет! Как твои дела? Я тут нашла интересное место, куда можно сходить в выходные.
-          </div>
-          <div class="message-actions">
-            <button class="msg-action-btn"><i class="fas fa-reply"></i></button>
-            <button class="msg-action-btn"><i class="fas fa-heart"></i></button>
-          </div>
+      <div class="input-container">
+        <div class="controls">
+          <button class="clear-btn" id="clearButton" title="Очистить чат для всех">
+            <svg viewBox="0 0 24 24">
+              <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+            </svg>
+            Очистить
+          </button>
         </div>
-        
-        <div class="message message-outgoing">
-          <div class="message-header">
-            <div class="username">
-              Вы
-            </div>
-            <div class="timestamp">10:27</div>
-          </div>
-          <div class="message-content">
-            Привет! Всё отлично, спасибо! Рассказывай, что за место? 😊
-          </div>
-          <div class="message-actions">
-            <button class="msg-action-btn"><i class="fas fa-reply"></i></button>
-            <button class="msg-action-btn"><i class="fas fa-heart"></i></button>
-          </div>
-        </div>
-        
-        <div class="message message-incoming">
-          <div class="message-header">
-            <div class="username">
-              Мария <span class="user-badge">VIP</span>
-            </div>
-            <div class="timestamp">10:29</div>
-          </div>
-          <div class="message-content">
-            Это новый арт-кафе в центре. Там очень крутой интерьер и живая музыка по вечерам. Хочешь сходить в субботу?
-          </div>
-          <div class="message-actions">
-            <button class="msg-action-btn"><i class="fas fa-reply"></i></button>
-            <button class="msg-action-btn"><i class="fas fa-heart"></i></button>
-          </div>
-        </div>
-        
-        <div class="message message-incoming">
-          <div class="message-header">
-            <div class="username">
-              Мария <span class="user-badge">VIP</span>
-            </div>
-            <div class="timestamp">10:30</div>
-          </div>
-          <div class="message-content">
-            Вот фото интерьера: 🖼️
-          </div>
-          <div class="message-actions">
-            <button class="msg-action-btn"><i class="fas fa-reply"></i></button>
-            <button class="msg-action-btn"><i class="fas fa-heart"></i></button>
-          </div>
-        </div>
-      </div>
-      
-      <div id="message-form-container">
         <form id="messageForm">
-          <div class="input-group">
-            <input type="text" id="messageInput" placeholder="Напишите сообщение..." required>
-            <div class="input-actions">
-              <button type="button" class="input-btn" id="emojiBtn">
-                <i class="far fa-smile"></i>
-              </button>
-              <button type="button" class="input-btn" id="attachBtn">
-                <i class="fas fa-paperclip"></i>
-              </button>
-            </div>
-          </div>
-          <button type="submit" id="sendButton">
-            <i class="fas fa-paper-plane"></i>
+          <input type="text" id="messageInput" placeholder="Напишите сообщение..." required autocomplete="off">
+          <button type="submit" id="sendButton" disabled>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </button>
         </form>
       </div>
-    </main>
-  </div>
-  
-  <button class="install-btn" id="installButton">
-    <i class="fas fa-download"></i>
-    Установить приложение
-  </button>
-  
-  <!-- Модальное окно настроек -->
-  <div class="modal" id="settingsModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title">Настройки профиля</h2>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">Ваше имя</label>
-          <input type="text" class="form-input" value="Гость_4F2A">
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Статус</label>
-          <input type="text" class="form-input" placeholder="Ваш статус...">
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Тема оформления</label>
-          <select class="form-input">
-            <option>Фиолетовая (стандартная)</option>
-            <option>Темно-синяя</option>
-            <option>Изумрудная</option>
-            <option>Темно-красная</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Уведомления</label>
-          <div style="display: flex; gap: 15px; margin-top: 10px;">
-            <label style="display: flex; align-items: center; gap: 8px;">
-              <input type="checkbox" checked>
-              Звуковые
-            </label>
-            <label style="display: flex; align-items: center; gap: 8px;">
-              <input type="checkbox" checked>
-              Вибро
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" id="closeSettings">Отмена</button>
-        <button class="btn btn-primary" id="saveSettings">Сохранить</button>
-      </div>
     </div>
+
+    <button class="install-btn" id="installButton" style="display: none;">Установить приложение</button>
   </div>
-  
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
@@ -1004,71 +488,52 @@
       const auth = firebase.auth();
       const database = firebase.database();
       
-      // DOM Elements
       const messagesDiv = document.getElementById('messages');
       const messageForm = document.getElementById('messageForm');
       const messageInput = document.getElementById('messageInput');
       const sendButton = document.getElementById('sendButton');
+      const statusDiv = document.getElementById('status');
       const installButton = document.getElementById('installButton');
-      const contactsToggle = document.getElementById('contactsToggle');
-      const settingsToggle = document.getElementById('settingsToggle');
-      const settingsModal = document.getElementById('settingsModal');
-      const closeSettings = document.getElementById('closeSettings');
-      const saveSettings = document.getElementById('saveSettings');
-      const themeToggle = document.getElementById('themeToggle');
-      const emojiBtn = document.getElementById('emojiBtn');
-      const attachBtn = document.getElementById('attachBtn');
-      
-      // Toggle contacts panel on mobile
-      contactsToggle.addEventListener('click', () => {
-        const contactsPanel = document.getElementById('contacts-panel');
-        contactsPanel.style.display = contactsPanel.style.display === 'block' ? 'none' : 'block';
-      });
-      
-      // Settings modal
-      settingsToggle.addEventListener('click', () => {
-        settingsModal.style.display = 'flex';
-      });
-      
-      closeSettings.addEventListener('click', () => {
-        settingsModal.style.display = 'none';
-      });
-      
-      saveSettings.addEventListener('click', () => {
-        settingsModal.style.display = 'none';
-        alert('Настройки успешно сохранены!');
-      });
-      
-      // Theme toggle
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('light-theme');
-        const icon = themeToggle.querySelector('i');
-        if (document.body.classList.contains('light-theme')) {
-          icon.classList.replace('fa-moon', 'fa-sun');
-        } else {
-          icon.classList.replace('fa-sun', 'fa-moon');
-        }
-      });
-      
-      // Emoji button
-      emojiBtn.addEventListener('click', () => {
-        const emojis = ['😊', '😂', '❤️', '👍', '👏', '🎉', '🙏', '🤔', '😍', '🥳'];
-        const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-        messageInput.value += randomEmoji;
-        messageInput.focus();
-      });
-      
-      // Attach button
-      attachBtn.addEventListener('click', () => {
-        alert('Функция прикрепления файлов в разработке. Скоро будет доступна!');
-      });
-      
+      const clearButton = document.getElementById('clearButton');
+
+      let currentUserId = null;
+      let isAdmin = false;
+
+      function updateStatus(text, status) {
+        statusDiv.textContent = text;
+        statusDiv.className = status;
+      }
+
+      function formatTime(timestamp) {
+        if (!timestamp) return '';
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+
       // Sign in anonymously
       auth.signInAnonymously()
         .then((userCredential) => {
-          console.log("Signed in anonymously");
+          currentUserId = userCredential.user.uid;
+          console.log("Signed in anonymously with ID:", currentUserId);
+          updateStatus("✓ Подключено к серверу", "online");
           sendButton.disabled = false;
           messageInput.focus();
+          
+          // Check if admin (for demo purposes, first user is admin)
+          if (!localStorage.getItem('adminChecked')) {
+            database.ref('admin').once('value').then((snapshot) => {
+              if (!snapshot.exists()) {
+                // First user becomes admin
+                database.ref('admin').set(currentUserId);
+                isAdmin = true;
+                console.log("This user is now admin");
+              } else if (snapshot.val() === currentUserId) {
+                isAdmin = true;
+                console.log("This user is admin");
+              }
+              localStorage.setItem('adminChecked', 'true');
+            });
+          }
           
           // Listen for new messages
           database.ref('messages')
@@ -1081,38 +546,27 @@
         })
         .catch((error) => {
           console.error("Auth error:", error);
+          updateStatus("✗ Ошибка подключения", "offline");
         });
 
       // Display a message
       function displayMessage(message) {
-        const isOutgoing = message.userId === auth.currentUser.uid;
+        const isCurrentUser = message.userId === currentUserId;
         const messageElement = document.createElement('div');
-        messageElement.className = `message ${isOutgoing ? 'message-outgoing' : 'message-incoming'}`;
+        messageElement.className = `message ${isCurrentUser ? 'current-user' : 'other-user'}`;
         
-        const username = isOutgoing ? 'Вы' : (message.username || 'Гость');
+        const isAdminMessage = message.userId === isAdmin;
+        const adminBadge = isAdminMessage ? '<span class="admin-badge">ADMIN</span>' : '';
         
         messageElement.innerHTML = `
           <div class="message-header">
-            <div class="username">
-              ${username}
-            </div>
-            <div class="timestamp">${formatTime(message.timestamp)}</div>
+            <span class="username">${message.username || 'Гость'}${adminBadge}</span>
+            <span class="timestamp">${formatTime(message.timestamp)}</span>
           </div>
-          <div class="message-content">${message.text}</div>
-          <div class="message-actions">
-            <button class="msg-action-btn"><i class="fas fa-reply"></i></button>
-            <button class="msg-action-btn"><i class="fas fa-heart"></i></button>
-          </div>
+          <div class="message-text">${message.text}</div>
         `;
-        
         messagesDiv.appendChild(messageElement);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      }
-
-      function formatTime(timestamp) {
-        if (!timestamp) return '';
-        const date = new Date(timestamp);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       }
 
       // Send message handler
@@ -1141,28 +595,47 @@
           messageInput.value = '';
         } catch (error) {
           console.error("Send error:", error);
+          updateStatus("✗ Ошибка отправки", "offline");
         } finally {
           sendButton.disabled = false;
         }
       });
 
+      // Clear chat handler
+      clearButton.addEventListener('click', async () => {
+        if (!isAdmin) {
+          alert('Только администратор может очищать чат');
+          return;
+        }
+        
+        if (confirm('Вы уверены, что хотите очистить чат для всех пользователей?')) {
+          try {
+            await database.ref('messages').remove();
+            messagesDiv.innerHTML = '';
+          } catch (error) {
+            console.error("Clear chat error:", error);
+            alert('Ошибка при очистке чата');
+          }
+        }
+      });
+
       // Monitor connection status
       database.ref('.info/connected').on('value', (snapshot) => {
-        const statusIndicator = document.querySelector('.status-indicator');
-        const statusText = document.querySelector('.connection-status span:last-child');
-        
         if (snapshot.val() === true) {
-          statusIndicator.className = 'status-indicator online';
-          statusText.textContent = 'Стабильное соединение';
+          updateStatus("✓ Подключено к серверу", "online");
           sendButton.disabled = false;
         } else {
-          statusIndicator.className = 'status-indicator offline';
-          statusText.textContent = 'Нет соединения';
+          updateStatus("⌛ Нет соединения", "offline");
           sendButton.disabled = true;
         }
       });
 
       // ===== PWA Installation =====
+      function isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      }
+      
       function isStandalone() {
         return window.matchMedia('(display-mode: standalone)').matches || 
                window.navigator.standalone;
@@ -1170,13 +643,19 @@
       
       if (isStandalone()) {
         installButton.style.display = 'none';
+      } else if (isIOS()) {
+        installButton.textContent = 'Добавить на главный экран';
+        installButton.style.display = 'block';
+        installButton.addEventListener('click', () => {
+          alert('Для установки:\n1. Нажмите "Поделиться"\n2. Выберите "На экран Домой"\n3. Подтвердите добавление');
+        });
       } else {
         let deferredPrompt;
         
         window.addEventListener('beforeinstallprompt', (e) => {
           e.preventDefault();
           deferredPrompt = e;
-          installButton.style.display = 'flex';
+          installButton.style.display = 'block';
         });
 
         installButton.addEventListener('click', async () => {
@@ -1192,9 +671,54 @@
       }
 
       // ===== Service Worker Registration =====
+      const swContent = `
+        const CACHE_NAME = 'mireshabar-v2';
+        const ASSETS = [
+          '/',
+          '/index.html',
+          'https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js',
+          'https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js',
+          'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js',
+          'https://img.icons8.com/flat/1024/tea.png',
+          'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Pacifico&display=swap'
+        ];
+
+        self.addEventListener('install', (e) => {
+          e.waitUntil(
+            caches.open(CACHE_NAME)
+              .then(cache => cache.addAll(ASSETS))
+              .then(() => self.skipWaiting())
+          );
+        });
+
+        self.addEventListener('activate', (e) => {
+          e.waitUntil(
+            caches.keys().then(cacheNames => {
+              return Promise.all(
+                cacheNames.map(cache => {
+                  if (cache !== CACHE_NAME) {
+                    return caches.delete(cache);
+                  }
+                })
+              );
+            })
+          );
+        });
+
+        self.addEventListener('fetch', (e) => {
+          e.respondWith(
+            caches.match(e.request)
+              .then(response => response || fetch(e.request))
+          );
+        });
+      `;
+
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
+          const blob = new Blob([swContent], { type: 'text/javascript' });
+          const swUrl = URL.createObjectURL(blob);
+          
+          navigator.serviceWorker.register(swUrl)
             .then(registration => {
               console.log('ServiceWorker зарегистрирован:', registration.scope);
             })
@@ -1204,21 +728,22 @@
         });
       }
 
-      // Auto focus on input
-      messageInput.focus();
-      
-      // Add animation to messages on load
-      setTimeout(() => {
-        const messages = document.querySelectorAll('.message');
-        messages.forEach((msg, index) => {
-          setTimeout(() => {
-            msg.style.animation = `fadeIn 0.4s ease ${index * 0.1}s forwards`;
-          }, 100);
-        });
-      }, 500);
-      
+      // Handle viewport on mobile devices
+      function adjustViewport() {
+        const viewport = document.querySelector('meta[name="viewport"]');
+        if (window.innerWidth <= 600) {
+          viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+        } else {
+          viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, viewport-fit=cover');
+        }
+      }
+
+      window.addEventListener('resize', adjustViewport);
+      adjustViewport();
+
     } catch (error) {
       console.error("Initialization error:", error);
+      document.getElementById('status').textContent = "Ошибка инициализации";
     }
   </script>
 </body>
