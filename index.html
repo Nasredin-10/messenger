@@ -15,8 +15,25 @@
   <!-- Apple Touch Icons -->
   <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/240/tea.png">
   
-  <!-- Inline Manifest to avoid 404 error -->
-  <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxQTFBMUEiLAogICJ0aGVtZV9jb2xvciI6ICIjNUUyQjhDIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbHVlbmN5LzI0MC90ZWEucG5nIiwKICAgICAgInNpemVzIjogIjI0MHgMjQwIgogICAgfQogIF0KfQ==">
+  <!-- Manifest as JSON object to avoid URL issues -->
+  <script type="application/manifest+json">
+    {
+      "name": "MiresHabar",
+      "short_name": "MiresHabar",
+      "description": "Мессенджер MiresHabar",
+      "start_url": "./",
+      "display": "standalone",
+      "background_color": "#1A1A1A",
+      "theme_color": "#5E2B8C",
+      "icons": [
+        {
+          "src": "https://img.icons8.com/fluency/240/tea.png",
+          "sizes": "240x240",
+          "type": "image/png"
+        }
+      ]
+    }
+  </script>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -735,7 +752,7 @@
 
     // Initialize Firebase
     try {
-      firebase.initializeApp(firebaseConfig);
+      const firebaseApp = firebase.initializeApp(firebaseConfig);
       console.log("Firebase initialized");
       
       const auth = firebase.auth();
@@ -774,8 +791,22 @@
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       }
 
-      // Sign in anonymously
-      auth.signInAnonymously()
+      // Sign in anonymously with error handling
+      function signInAnonymously() {
+        return auth.signInAnonymously()
+          .catch(error => {
+            console.error("Auth error:", error);
+            if (error.code === 'auth/network-request-failed') {
+              updateStatus("⌛ Нет интернет-соединения", "offline");
+            } else {
+              updateStatus("✗ Ошибка подключения", "offline");
+            }
+            throw error;
+          });
+      }
+
+      // Initial sign in
+      signInAnonymously()
         .then((userCredential) => {
           console.log("Signed in anonymously");
           updateStatus("✓ Подключено", "online");
@@ -804,9 +835,8 @@
               }
             });
         })
-        .catch((error) => {
-          console.error("Auth error:", error);
-          updateStatus("✗ Ошибка подключения", "offline");
+        .catch(() => {
+          // Error already handled in signInAnonymously()
         });
 
       // Display a message
@@ -834,9 +864,9 @@
         try {
           sendButton.disabled = true;
           
-          // Check auth
+          // Check auth and reconnect if needed
           if (!auth.currentUser) {
-            await auth.signInAnonymously();
+            await signInAnonymously();
           }
           
           // Send message
@@ -931,6 +961,7 @@
               e.waitUntil(
                 caches.open(CACHE_NAME)
                   .then(cache => cache.addAll(ASSETS))
+                  .catch(err => console.log('Cache addAll error:', err))
               );
             });
 
@@ -938,6 +969,7 @@
               e.respondWith(
                 caches.match(e.request)
                   .then(response => response || fetch(e.request))
+                  .catch(err => console.log('Fetch error:', err))
               );
             });
           `;
