@@ -13,7 +13,7 @@
   <meta name="description" content="Анонимный мессенджер с личными чатами">
   
   <!-- Base64 Manifest -->
-  <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM2YTFiOWEiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1gLmljb25zOC5jb20vZmxhdC8xMDI0L3RlYS5wbmciLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbGF0LzEwMjQvdGVhLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ">
+  <link rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIk1pcmVzSGFiYXIiLAogICJzaG9ydF9uYW1lIjogIk1pcmVzSGFiYXIiLAogICJkZXNjcmlwdGlvbiI6ICLQnNC10YHRgtC10YDQvdC10L3QuNC1IE1pcmVzSGFiYXIiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzEyMTIxMiIsCiAgInRoZW1lX2NvbG9yIjogIiM2YTFiOWEiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImh0dHBzOi8vaW1nLmljb25zOC5jb20vZmxhdC8xMDI0L3RlYS5wbmciLAogICAgICAic2l6ZXMiOiAiMTkyeDE5yIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9pbWcuaWNvbnM4LmNvbS9mbGF0LzEwMjQvdGVhLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==">
   
   <!-- External Icons -->
   <link rel="apple-touch-icon" href="https://img.icons8.com/flat/1024/tea.png">
@@ -754,16 +754,23 @@
         });
         
         // Update on connection status change
-        database.ref('.info/connected').on('value', (snapshot) => {
+        const connectedRef = database.ref('.info/connected');
+        connectedRef.on('value', (snapshot) => {
           if (snapshot.val() === true) {
+            // When we lose our connection to Firebase, we want to mark ourselves as offline
+            userRef.onDisconnect().update({
+              online: false
+            });
+            
+            // When we reconnect, update online status
             userRef.update({
               online: true,
               lastOnline: firebase.database.ServerValue.TIMESTAMP
             });
+            
             userStatus = 'online';
             userStatusIndicator.className = 'status-indicator';
           } else {
-            userRef.update({ online: false });
             userStatus = 'offline';
             userStatusIndicator.className = 'status-indicator status-offline';
           }
