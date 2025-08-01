@@ -482,6 +482,16 @@
     .temp-chat-info strong {
       color: var(--electric-purple);
     }
+
+    .error-message {
+      color: #FF6B6B;
+      background: rgba(255, 107, 107, 0.1);
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-top: 8px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(255, 107, 107, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -496,7 +506,7 @@
     <div id="status" class="loading">Подключение к серверу...</div>
 
     <div class="temp-chat-info">
-      💬 <strong>Временный чат</strong> - все сообщения автоматически удалятся через 24 часа
+      💬 <strong>Временный чат</strong> - все сообщения автоматически удалятся через 1 час
     </div>
     
     <div id="messages"></div>
@@ -504,6 +514,7 @@
     <form id="messageForm">
       <input type="text" id="messageInput" placeholder="Напишите сообщение..." required>
       <button type="submit" id="sendButton" disabled>Отправить</button>
+      <div id="errorContainer" style="display: none;"></div>
     </form>
 
     <button class="install-btn" id="installButton" style="display: none;">Установить приложение</button>
@@ -573,14 +584,24 @@
       const sendButton = document.getElementById('sendButton');
       const statusDiv = document.getElementById('status');
       const installButton = document.getElementById('installButton');
+      const errorContainer = document.getElementById('errorContainer');
 
-      // Generate a unique chat ID based on current date (changes daily)
+      // Generate a unique chat ID based on current hour (changes every hour)
       function getCurrentChatId() {
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
-        return `chat_${year}${month}${day}`;
+        const hour = String(now.getHours()).padStart(2, '0');
+        return `chat_${year}${month}${day}_${hour}`;
+      }
+
+      function showError(message) {
+        errorContainer.style.display = 'block';
+        errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+        setTimeout(() => {
+          errorContainer.style.display = 'none';
+        }, 5000);
       }
 
       function updateStatus(text, status) {
@@ -594,33 +615,40 @@
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       }
 
-      // Sign in anonymously
-      auth.signInAnonymously()
-        .then((userCredential) => {
-          console.log("Signed in anonymously");
-          updateStatus("✓ Подключено к серверу", "online");
-          sendButton.disabled = false;
-          messageInput.focus();
-          
-          // Get current chat ID
-          const chatId = getCurrentChatId();
-          
-          // Listen for new messages in current chat
-          database.ref(`chats/${chatId}/messages`)
-            .orderByChild('timestamp')
-            .limitToLast(50)
-            .on('child_added', (snapshot) => {
-              const message = snapshot.val();
-              displayMessage(message);
-            });
+      // Sign in anonymously with retry logic
+      function signIn() {
+        auth.signInAnonymously()
+          .then((userCredential) => {
+            console.log("Signed in anonymously");
+            updateStatus("✓ Подключено к серверу", "online");
+            sendButton.disabled = false;
+            messageInput.focus();
+            
+            // Get current chat ID
+            const chatId = getCurrentChatId();
+            
+            // Listen for new messages in current chat
+            database.ref(`chats/${chatId}/messages`)
+              .orderByChild('timestamp')
+              .limitToLast(50)
+              .on('child_added', (snapshot) => {
+                const message = snapshot.val();
+                displayMessage(message);
+              });
 
-          // Schedule cleanup of old chats (older than 1 day)
-          cleanupOldChats();
-        })
-        .catch((error) => {
-          console.error("Auth error:", error);
-          updateStatus("✗ Ошибка подключения", "offline");
-        });
+            // Schedule cleanup of old chats (older than 1 hour)
+            cleanupOldChats();
+          })
+          .catch((error) => {
+            console.error("Auth error:", error);
+            updateStatus("✗ Ошибка подключения", "offline");
+            showError("Ошибка авторизации. Пытаемся подключиться снова...");
+            setTimeout(signIn, 5000); // Retry after 5 seconds
+          });
+      }
+
+      // Initial sign in
+      signIn();
 
       // Display a message
       function displayMessage(message) {
@@ -637,7 +665,7 @@
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
       }
 
-      // Send message handler
+      // Send message handler with improved error handling
       messageForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -646,6 +674,7 @@
         
         try {
           sendButton.disabled = true;
+          errorContainer.style.display = 'none';
           
           // Check auth
           if (!auth.currentUser) {
@@ -655,37 +684,46 @@
           // Get current chat ID
           const chatId = getCurrentChatId();
           
-          // Send message to current chat
-          await database.ref(`chats/${chatId}/messages`).push({
+          // Create message object
+          const message = {
             text: messageText,
             timestamp: firebase.database.ServerValue.TIMESTAMP,
             userId: auth.currentUser.uid,
             username: `Гость_${auth.currentUser.uid.slice(0, 4)}`
-          });
+          };
+          
+          // Send message to current chat
+          const newMessageRef = database.ref(`chats/${chatId}/messages`).push();
+          await newMessageRef.set(message);
           
           messageInput.value = '';
         } catch (error) {
           console.error("Send error:", error);
+          showError("Ошибка отправки сообщения. Проверьте подключение к интернету.");
           updateStatus("✗ Ошибка отправки", "offline");
         } finally {
           sendButton.disabled = false;
         }
       });
 
-      // Cleanup old chats (older than 1 day)
+      // Cleanup old chats (older than 1 hour)
       function cleanupOldChats() {
         const now = new Date();
-        const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-        const thresholdDate = oneDayAgo.toISOString().split('T')[0].replace(/-/g, '');
+        const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+        const thresholdDate = oneHourAgo.toISOString().split('T')[0].replace(/-/g, '');
+        const thresholdHour = String(oneHourAgo.getHours()).padStart(2, '0');
         
         database.ref('chats').once('value').then((snapshot) => {
           const updates = {};
           snapshot.forEach((chatSnapshot) => {
             const chatId = chatSnapshot.key;
-            // Extract date from chat ID (format: chat_YYYYMMDD)
-            const chatDateStr = chatId.replace('chat_', '');
+            // Extract date and hour from chat ID (format: chat_YYYYMMDD_HH)
+            const parts = chatId.split('_');
+            const chatDateStr = parts[1];
+            const chatHourStr = parts[2];
             
-            if (chatDateStr < thresholdDate) {
+            if (chatDateStr < thresholdDate || 
+               (chatDateStr === thresholdDate && chatHourStr < thresholdHour)) {
               updates[`chats/${chatId}`] = null;
             }
           });
