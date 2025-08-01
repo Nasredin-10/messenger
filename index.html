@@ -465,6 +465,23 @@
         font-size: 0.75rem;
       }
     }
+
+    /* Temporary chat info */
+    .temp-chat-info {
+      background: rgba(106, 60, 183, 0.2);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 0.85rem;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .temp-chat-info strong {
+      color: var(--electric-purple);
+    }
   </style>
 </head>
 <body>
@@ -477,6 +494,10 @@
     </header>
 
     <div id="status" class="loading">Подключение к серверу...</div>
+
+    <div class="temp-chat-info">
+      💬 <strong>Временный чат</strong> - все сообщения автоматически удалятся через 24 часа
+    </div>
     
     <div id="messages"></div>
     
@@ -553,6 +574,15 @@
       const statusDiv = document.getElementById('status');
       const installButton = document.getElementById('installButton');
 
+      // Generate a unique chat ID based on current date (changes daily)
+      function getCurrentChatId() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `chat_${year}${month}${day}`;
+      }
+
       function updateStatus(text, status) {
         statusDiv.textContent = text;
         statusDiv.className = status;
@@ -572,14 +602,20 @@
           sendButton.disabled = false;
           messageInput.focus();
           
-          // Listen for new messages
-          database.ref('messages')
+          // Get current chat ID
+          const chatId = getCurrentChatId();
+          
+          // Listen for new messages in current chat
+          database.ref(`chats/${chatId}/messages`)
             .orderByChild('timestamp')
             .limitToLast(50)
             .on('child_added', (snapshot) => {
               const message = snapshot.val();
               displayMessage(message);
             });
+
+          // Schedule cleanup of old chats (older than 1 day)
+          cleanupOldChats();
         })
         .catch((error) => {
           console.error("Auth error:", error);
@@ -616,8 +652,11 @@
             await auth.signInAnonymously();
           }
           
-          // Send message
-          await database.ref('messages').push({
+          // Get current chat ID
+          const chatId = getCurrentChatId();
+          
+          // Send message to current chat
+          await database.ref(`chats/${chatId}/messages`).push({
             text: messageText,
             timestamp: firebase.database.ServerValue.TIMESTAMP,
             userId: auth.currentUser.uid,
@@ -632,6 +671,32 @@
           sendButton.disabled = false;
         }
       });
+
+      // Cleanup old chats (older than 1 day)
+      function cleanupOldChats() {
+        const now = new Date();
+        const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        const thresholdDate = oneDayAgo.toISOString().split('T')[0].replace(/-/g, '');
+        
+        database.ref('chats').once('value').then((snapshot) => {
+          const updates = {};
+          snapshot.forEach((chatSnapshot) => {
+            const chatId = chatSnapshot.key;
+            // Extract date from chat ID (format: chat_YYYYMMDD)
+            const chatDateStr = chatId.replace('chat_', '');
+            
+            if (chatDateStr < thresholdDate) {
+              updates[`chats/${chatId}`] = null;
+            }
+          });
+          
+          if (Object.keys(updates).length > 0) {
+            database.ref().update(updates)
+              .then(() => console.log('Old chats cleaned up successfully'))
+              .catch((error) => console.error('Error cleaning up old chats:', error));
+          }
+        });
+      }
 
       // Monitor connection status
       database.ref('.info/connected').on('value', (snapshot) => {
